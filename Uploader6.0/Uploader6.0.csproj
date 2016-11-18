@@ -95,6 +95,7 @@
     <Content Include="Scripts\Uploader\cursor_drag.ico" />
     <Content Include="Scripts\Uploader\Uploader6.0.css" />
     <Content Include="Scripts\Uploader\Uploader6.0.js" />
+    <Content Include="View\dialog3.html" />
     <Content Include="View\dialog2.html" />
     <Content Include="View\dialog1.html" />
     <Content Include="View\imgdouble3.html" />
