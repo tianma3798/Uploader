@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="../Scripts/jquery-1.11.3.min.js"></script>
+    <script src="../Scripts/Uploader/Uploader6.0.js"></script>
+    <link href="../Scripts/Uploader/Uploader6.0.css" rel="stylesheet" />
+</head>
+<body>
+    <br /><br /><br />
+    <div>
+        上传文件名：
+        <span id="name"></span>
+        <br />
+        <br />
+        相对目录： <span id="relativeName"></span>
+    </div>
+    <br /><br /><br />
+    <div class="uploader uploader-default" id="uploadBtn"></div>
+    <br />
+    <br /><br />
+    <script>
+        /*******简单上传，后台自动处理，获取上传后台文件名+相对目录*******/
+        var uploader = $('#uploadBtn').uploader({
+            url: 'ws://localhost:63588/ashx/upload.ashx',
+            text: '简单上传按钮',
+            onSuccess: function (data) {
+                console.info(data);
+                $('#name').text(data.newName);
+                $('#relativeName').text(data.relativeName);
+            }
+        });
+    </script>
+    <!--<div class="uploader_panel">
+        <div class="uploader_item">
+            <div class="title"><span class="file-icon"></span> <span class="file-name"></span></div>
+            <div class="uploader-progress"><progress></progress></div>
+            <div class="status">
+                <div class="left"><span class="btn-proc">暂定</span></div>
+                <div class="right"><span id="curLengt"></span>/<span class="total"></span></div>
+                <div class="clear"></div>
+            </div>
+            <span class="close">&times;</span>
+        </div>
+        <div class="uploader_item">
+            <div class="title">
+                <span class="icon"></span>  Uploader-master (1).zip
+            </div>
+            <div class="uploader-progress">
+                <progress></progress>
+            </div>
+            <div class="status">
+                <div class="left">
+                    <span class="btn-proc">暂定</span>
+                </div>
+                <div class="right">
+                    <span id="curLengt">1000kb</span>/<span class="total">1000kb</span>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <span class="close">&times;</span>
+        </div>
+        <div class="uploader_item">
+            <div class="title">
+                <span class="icon"></span>  Uploader-master (1).zip
+            </div>
+            <div class="uploader-progress">
+                <progress></progress>
+            </div>
+            <div class="status">
+                <div class="left">
+                    <span class="btn-proc">暂定</span>
+                </div>
+                <div class="right">
+                    <span id="curLengt">1000kb</span>/<span class="total">1000kb</span>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <span class="close">&times;</span>
+        </div>
+    </div>-->
+
+
+</body>
+</html>

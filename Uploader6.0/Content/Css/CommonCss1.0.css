@@ -1,0 +1,126 @@
+﻿
+body, html {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+    a img {
+        border: 0px;
+    }
+
+/*****布局使用******/
+p, input, h1, h2, h3, h4, h5, h6 {
+    margin: 0px;
+    padding: 0px;
+}
+
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.blank {
+    height: 100px;
+}
+
+.editable {
+    width: 300px;
+    min-height: 200px;
+    border: 1px solid red;
+    margin: 30px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+
+
+/***字体颜色***/
+.redFont {
+    color: red;
+}
+
+.blueFont {
+    color: blue;
+}
+
+.grayFont {
+    color: #8d8d8d;
+}
+
+.blackFont {
+    color: black;
+}
+
+/*****背景颜色*****/
+.redBack {
+    background-color: red;
+}
+
+
+
+/***测试常用****/
+.paddingSmall {
+    padding:5px;
+}
+.paddingMiddle {
+    padding:10px;
+}
+.paddingBig {
+    padding:30px;
+}
+.divOne {
+    width: 200px;
+    height: 200px;
+    border: 1px solid blue;
+}
+
+.divFixed {
+    width: 100px;
+    height: 100px;
+    font-size: 15px;
+    text-align: center;
+    border: 2px solid red;
+    position: fixed;
+}
+
+.divFixedRight {
+    position: fixed;
+    right: 0px;
+    border: 1px solid blue;
+    padding: 5px;
+}
+
+.divTwo {
+    width: 200px;
+    height: 200px;
+    margin: 50px;
+    border: 1px solid red;
+    overflow: auto;
+}
+
+.inputSmall {
+    height: 18px;
+    line-height: 18px;
+    width: 200px;
+    font-size: 13px;
+    border: 1px solid gray;
+    padding: 5px 2px;
+}
+
+    .inputSmall:focus {
+        box-shadow: 0px 0px 0px 3px rgba(255, 106, 0, 0.66);
+    }

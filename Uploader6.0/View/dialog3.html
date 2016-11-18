@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="../Scripts/jquery-1.11.3.min.js"></script>
+    <script src="../Scripts/Uploader/Uploader6.0.js"></script>
+    <link href="../Scripts/Uploader/Uploader6.0.css" rel="stylesheet" />
+    <link href="../Scripts/Cover3.0/Cover3.0.css" rel="stylesheet" />
+    <script src="../Scripts/Cover3.0/Cover3.0.js"></script>
+</head>
+<body>
+    <br /><br /><br />
+    <div>
+        上传文件名：
+        <span id="name"></span>
+        <br />
+        <img id="relativeName" />
+    </div>
+    <br /><br /><br />
+    <div class="uploader uploader-link" id="uploadBtn"></div>
+    <br />
+    <br /><br />
+
+    <script>
+        /*********剪切图片，后台自动处理模式+指定根目录的子文件夹保存**********/
+        var uploader = $('#uploadBtn').uploader({
+            url: 'ws://localhost:63588/ashx/upload.ashx',
+            fileExts: 'jpg;png',
+            type: 'dialog',
+            text: '剪切图片模式',
+            subfolder: 'content',//默认后台处理简单模式 ，指定子文件夹
+            more: false,//是否可以上传多个
+            auto: true, //是否自动上传
+            coverParams: {
+                title: '设置头像',
+                targetWidth: 100,
+                targetHeight: 100
+            },
+            onSuccess: function (data) {
+                console.info(data);
+                $('#name').text(data.newName);
+                $('#relativeName').attr('src', data.relativeName);
+            }
+        });
+    </script>
+
+
+</body>
+</html>

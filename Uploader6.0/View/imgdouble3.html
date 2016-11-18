@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="../Scripts/jquery-1.11.3.min.js"></script>
+    <script src="../Scripts/Uploader/Uploader6.0.js"></script>
+    <link href="../Scripts/Uploader/Uploader6.0.css" rel="stylesheet" />
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <br /><br /><br />
+        <div class="uploader uploader-link" id="uploadBtn"></div>
+        <br />
+        <br /><br />
+        <div class="row">
+        </div>
+        <script>
+        /**大小图片前台处理，后台简单处理模式，上传成功后显示图片**/
+        var uploader = $('#uploadBtn').uploader({
+            url: 'ws://localhost:63588/ashx/upload.ashx',
+            fileExts: 'jpg;png',
+            text: '上传图片',
+            more: true,//是否可以上传多个
+            auto: true, //是否自动上传
+            type: 'imgdouble',
+            minWidth: 100,
+            minHeight: 100,
+            maxWidth: 800,
+            maxHeight: 600,
+            handleType: '1',//对于大小图模式最好不要自动处理
+            subfolder: 'touxiang',
+            onSuccess: function (data) {
+                //添加到列表,每个图片上传成功都会触发
+                var row = $('.row');
+                var col = $(' <div class="col-xs-6 col-md-3" />');
+                var a = $('<a class="thumbnail" />');
+                a.attr('href', '/content/uploadfiles/' + data.big.relativeName);
+                a.attr('title', '点击查看大图').attr('target','_blank');
+                a.append('<img src=' + '/content/uploadfiles/' + data.small.relativeName + ' />');
+                col.append(a);
+                row.append(col);
+            }
+        });
+        </script>
+    </div>
+</body>
+</html>

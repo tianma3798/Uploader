@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="../Scripts/jquery-1.11.3.min.js"></script>
+    <script src="../Scripts/Uploader/Uploader6.0.js"></script>
+    <link href="../Scripts/Uploader/Uploader6.0.css" rel="stylesheet" />
+</head>
+<body>
+    <br /><br /><br />
+    <div>
+        上传文件名：
+        <span id="name"></span>
+        <br />
+        <span id="relativeName"></span>
+        <input type="file" multiple accept="image" />
+    </div>
+    <br /><br /><br />
+    <div class="uploader uploader-default" id="uploadBtn"></div>
+    <br />
+    <br /><br />
+    <script>
+        var uploader = $('#uploadBtn').uploader({
+            url: 'ws://localhost:63588/ashx/upload.ashx',
+            text: '多个文件上传按钮',
+            more: true,
+            onSuccess: function (data) {
+                $('#name').text(data.newName);
+                $('#relativeName').text(data.relativeName);
+            }
+        });
+    </script>
+</body>
+</html>
