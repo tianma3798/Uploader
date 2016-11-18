@@ -11,24 +11,25 @@
 <body>
     <br /><br /><br />
     <div>
-        上传文件名：
-        <span id="name"></span>
-        <br />
-        <span id="relativeName"></span>
-        <input type="file" multiple accept="image" />
+      <p>
+          上传文件名：
+          <div id="name"></div>
+      </p>
+      <p>
+          相对目录：
+          <div id="relativeName"></div>
+      </p>
     </div>
     <br /><br /><br />
     <div class="uploader uploader-default" id="uploadBtn"></div>
-    <br />
-    <br /><br />
     <script>
         var uploader = $('#uploadBtn').uploader({
             url: 'ws://localhost:63588/ashx/upload.ashx',
             text: '多个文件上传按钮',
             more: true,
             onSuccess: function (data) {
-                $('#name').text(data.newName);
-                $('#relativeName').text(data.relativeName);
+                $('#name').append(data.newName).append("<br/>");
+                $('#relativeName').append(data.relativeName).append("<br/>");
             }
         });
     </script>
