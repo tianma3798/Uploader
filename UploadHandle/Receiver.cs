@@ -43,7 +43,7 @@ namespace UploadHandle
         /// <summary>
         /// 错误日志记录
         /// </summary>
-        private LogHelper.LogHelper _log = new LogHelper.LogHelper();
+       // private LogHelper.LogHelper _log = new LogHelper.LogHelper();
         /// <summary>
         /// 当前接收文件成功后出发
         /// </summary>
@@ -160,7 +160,7 @@ namespace UploadHandle
             }
             catch (Exception ex)
             {
-                _log.WriteLine("服务器保存文件出错，" + ex.Message);
+                //_log.WriteLine("服务器保存文件出错，" + ex.Message);
                 throw new Exception("服务保存文件异常，" + ex.Message);
             }
         }
