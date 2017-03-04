@@ -29,14 +29,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\UploadHandle.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common">
-      <HintPath>..\..\..\自开发工具\DLL_Common\Common.dll</HintPath>
-    </Reference>
-    <Reference Include="LogHelper">
-      <HintPath>..\..\..\自开发工具\DLL集合\LogHelper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -59,6 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\NewWork2017\原框架\商城系统\Common\Common.csproj">
+      <Project>{f230ec8b-4f93-4866-8b04-93b43900b7a6}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
