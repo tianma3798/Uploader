@@ -57,7 +57,7 @@ namespace UploadHandle
                 relative = "/" + relative;
             if (relative.EndsWith("/") == false)
                 relative += "/";
-            relative += DateTime.Now.ToString("yyyyMM/dd/");
+            relative += DateTime.Now.ToString("yyyyMM/dd/",System.Globalization.DateTimeFormatInfo.InvariantInfo);
             return relative;
         }
     }
