@@ -35,7 +35,7 @@ namespace UploadHandle
         public string GetAbsolutePath()
         {
             //默认当前网站根目录下的yyyyMM/dd
-            string path = Folder + "/" + DateTime.Now.ToString("yyyyMM/dd/"); ;
+            string path = Folder + "/" + DateTime.Now.ToString("yyyyMM/dd/", System.Globalization.DateTimeFormatInfo.InvariantInfo) ;
             //如果是相对路径
             if (path.StartsWith("/"))
                 path = "~" + path;

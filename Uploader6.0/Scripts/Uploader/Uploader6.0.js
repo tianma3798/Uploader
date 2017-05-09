@@ -4,6 +4,7 @@
 * 2.如果使用前台图片剪切，还依赖于Cover3.0覆盖层
 * 3.当前插件是jquery插件，但是实例化后不再支持链式编程
 * 4.不再支持IE9及以下浏览器
+* 5.使用_this.sending解决IE浏览器单个文件发送成两个的问题
 */
 /**
 * 功能及参数描述
@@ -1017,6 +1018,7 @@
         destroy: function () {
             this.cover.destroy();
         }
+
     }
     //指定DataUrl 上传图片文件
     /*
@@ -1069,6 +1071,7 @@
         this.startTime = new Date();
         this.total = file.size;
         this.debug = loader.opts.debug;
+        this.sending = false;//判断是否正在发送文件
         //文件验证
         if (this.check()) {
             //初始化显示
@@ -1162,7 +1165,8 @@
                     //判断是否上传成功
                     if (_this.loaded >= _this.total) {
                         _this.sendSuccess();
-                        console.log('总上传：' + _this.loaded + ',用时：' + (new Date().getTime() - _this.startTime.getTime()) / 1000);
+                        if (_this.debug)
+                            console.log('总上传：' + _this.loaded + ',用时：' + (new Date().getTime() - _this.startTime.getTime()) / 1000);
                     }
                 } else {
                     console.error("上传出错：");
@@ -1196,6 +1200,8 @@
             reader.onload = function (e) {
                 //继续发送
                 //如果没有完成，继续读取
+                //console.info('已经读取：'+_this.readed);
+               
                 _this.readed += e.loaded;
                 _this.sendData();
                 if (_this.readed < _this.total) {
@@ -1232,7 +1238,7 @@
             var socket = this.socket;
             //将分段数据上传到服务器
             var blob = reader.result;
-            if (_this.loaded == 0) {
+            if (_this.sending == false) {
                 //第一次发送文件信息
                 var fileInfo = {
                     oldName: _this.file.name, //上传的文件名称
@@ -1243,6 +1249,8 @@
                     other: '',//上传的其他参数或说明,保留
                 };
                 socket.send(JSON.stringify(fileInfo));
+                _this.sending = true;
+                //console.info('-------开始发送文件');
             }
             socket.send(blob);
         },
@@ -1332,6 +1340,7 @@
             var reader = _this.reader;
             var ws = _this.ws;
             ws.onopen = function () {
+                if (_this.debug)
                 console.log('connected成功');
                 _this.onopen();
                 if (_this.onSuccess)
@@ -1354,8 +1363,8 @@
                     reader.stop();
                 if (_this.debug) {
                     console.log('链接发生异常');
+                    console.error(e);
                 }
-                console.error(e);
             }
         },
         //当链接打开成功
@@ -1382,10 +1391,11 @@
             }
         }
     }
-
     //扩展名 验证,返回bool 值
     function checkExt(val, opts) {
         var _opts = opts;
+        if (isWechat())//如果是微信客户端不能通过文件名的后缀名验证
+            return true;
         var enableList = _opts.fileExts.toLowerCase().split(';');
         var str = "文件格式不正确，仅支持：" + enableList.join(',');
         //1.获取当前上传扩展名
@@ -1406,6 +1416,15 @@
         }
         uploadCfg.error(str);
         return false;
+    }
+    //判断是否是微信浏览器中打开
+    function isWechat() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            return true;
+        } else {
+            return false;
+        }
     }
     //获取指定字节大小的显示
     function getShowSize(size) {
