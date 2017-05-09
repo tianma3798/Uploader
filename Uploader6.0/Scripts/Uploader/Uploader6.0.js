@@ -1018,7 +1018,6 @@
         destroy: function () {
             this.cover.destroy();
         }
-
     }
     //指定DataUrl 上传图片文件
     /*
@@ -1166,7 +1165,7 @@
                     if (_this.loaded >= _this.total) {
                         _this.sendSuccess();
                         if (_this.debug)
-                            console.log('总上传：' + _this.loaded + ',用时：' + (new Date().getTime() - _this.startTime.getTime()) / 1000);
+                        console.log('总上传：' + _this.loaded + ',用时：' + (new Date().getTime() - _this.startTime.getTime()) / 1000);
                     }
                 } else {
                     console.error("上传出错：");
@@ -1200,8 +1199,6 @@
             reader.onload = function (e) {
                 //继续发送
                 //如果没有完成，继续读取
-                //console.info('已经读取：'+_this.readed);
-               
                 _this.readed += e.loaded;
                 _this.sendData();
                 if (_this.readed < _this.total) {
@@ -1250,7 +1247,6 @@
                 };
                 socket.send(JSON.stringify(fileInfo));
                 _this.sending = true;
-                //console.info('-------开始发送文件');
             }
             socket.send(blob);
         },
@@ -1363,8 +1359,8 @@
                     reader.stop();
                 if (_this.debug) {
                     console.log('链接发生异常');
-                    console.error(e);
                 }
+                console.error(e);
             }
         },
         //当链接打开成功
@@ -1391,11 +1387,12 @@
             }
         }
     }
+
     //扩展名 验证,返回bool 值
     function checkExt(val, opts) {
         var _opts = opts;
         if (isWechat())//如果是微信客户端不能通过文件名的后缀名验证
-            return true;
+             return true;
         var enableList = _opts.fileExts.toLowerCase().split(';');
         var str = "文件格式不正确，仅支持：" + enableList.join(',');
         //1.获取当前上传扩展名

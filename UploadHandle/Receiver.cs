@@ -111,7 +111,6 @@ namespace UploadHandle
                         {
                             await SendError(ex);
                         }
-
                     }
                     else if (result.MessageType == WebSocketMessageType.Binary)
                     {
