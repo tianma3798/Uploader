@@ -43,7 +43,7 @@ namespace UploadHandle
         /// <summary>
         /// 错误日志记录
         /// </summary>
-        private LogHelper.LogHelper _log = new LogHelper.LogHelper();
+        private LogHelper.LogHelper _log = new LogHelper.LogHelper(@"D:\log.txt", true);
         /// <summary>
         /// 当前接收文件成功后出发
         /// </summary>

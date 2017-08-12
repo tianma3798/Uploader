@@ -34,7 +34,8 @@
       <HintPath>..\..\..\自开发工具\DLL_Common\Common.dll</HintPath>
     </Reference>
     <Reference Include="LogHelper">
-      <HintPath>..\..\..\自开发工具\DLL集合\LogHelper.dll</HintPath>
+      <HintPath>..\..\DLL集合\LogHelper.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
