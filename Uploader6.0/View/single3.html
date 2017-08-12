@@ -28,6 +28,7 @@
             text: '上传图片',
             more: false,//是否可以上传多个
             auto: true, //是否自动上传
+            debug: false,
             handleType: 1,//后台简单处理模式，存放到WebConfig中指定的文件夹
             onSuccess: function (data) {
                 $('#name').text(data.newName);

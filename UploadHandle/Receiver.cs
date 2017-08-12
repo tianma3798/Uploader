@@ -12,7 +12,7 @@ using System.Web.WebSockets;
 namespace UploadHandle
 {
     /// <summary>
-    /// 服务端接收文件封装
+    /// 服务端接收文件封装，此使用WebScoket方式接收文件
     /// </summary>
     public class Receiver
     {
@@ -43,7 +43,7 @@ namespace UploadHandle
         /// <summary>
         /// 错误日志记录
         /// </summary>
-        private LogHelper.LogHelper _log = new LogHelper.LogHelper(@"D:\log.txt", true);
+       // private LogHelper.LogHelper _log = new LogHelper.LogHelper();
         /// <summary>
         /// 当前接收文件成功后出发
         /// </summary>
@@ -67,7 +67,7 @@ namespace UploadHandle
         /// 构造函数
         /// </summary>
         /// <param name="subfolder">子文件夹</param>
-        public Receiver(string subfolder):base()
+        public Receiver(string subfolder) : base()
         {
             this.SubFolder = subfolder;
         }
@@ -160,7 +160,7 @@ namespace UploadHandle
             }
             catch (Exception ex)
             {
-                _log.WriteLine("服务器保存文件出错，" + ex.Message);
+                //_log.WriteLine("服务器保存文件出错，" + ex.Message);
                 throw new Exception("服务保存文件异常，" + ex.Message);
             }
         }

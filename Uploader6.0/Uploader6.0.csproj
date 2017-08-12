@@ -92,6 +92,9 @@
     <Content Include="Scripts\jquery-1.11.3.min.js" />
     <Content Include="Scripts\less.min.js" />
     <Content Include="Scripts\other.js" />
+    <Content Include="Scripts\Uploader6.1\cursor_drag.ico" />
+    <Content Include="Scripts\Uploader6.1\Uploader6.0.css" />
+    <Content Include="Scripts\Uploader6.1\Uploader6.0.js" />
     <Content Include="Scripts\Uploader\cursor_drag.ico" />
     <Content Include="Scripts\Uploader\Uploader6.0.css" />
     <Content Include="Scripts\Uploader\Uploader6.0.js" />

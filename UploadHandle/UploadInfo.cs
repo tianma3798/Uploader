@@ -96,7 +96,7 @@ namespace UploadHandle
             if (upMsg.HandleType == 0)
             {
                 //自动模式，上传到网站upload文件夹
-                this.UploadPath =new AutoHandle(upMsg.SubFolder).GetAbsolutePath();
+                this.UploadPath = new AutoHandle(upMsg.SubFolder).GetAbsolutePath();
             }
             else if (upMsg.HandleType == 1)
             {

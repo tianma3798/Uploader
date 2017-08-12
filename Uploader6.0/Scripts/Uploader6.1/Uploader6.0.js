@@ -1,10 +1,12 @@
 ﻿/**
-* Uploader控件重构6.0
+* Uploader控件重构6.1
 * 1.本插件依赖jQuery
 * 2.如果使用前台图片剪切，还依赖于Cover3.0覆盖层
 * 3.当前插件是jquery插件，但是实例化后不再支持链式编程
 * 4.不再支持IE9及以下浏览器
 * 5.使用_this.sending解决IE浏览器单个文件发送成两个的问题
+*
+* 6.新增Ajax上传处理方式
 */
 /**
 * 功能及参数描述
@@ -32,8 +34,10 @@
             * 1.简单形式(single,单纯上传文件，自动提交)
             * 2.对话框形式(dialog，需要图片剪切处理)
             * 3.前台压缩，大小图片上传 (imgdouble)
+            * 4.前台最大比例，图片处理（scale）
             */
             handleType: '0',//后台处理模式 0-自动模式，上传到网站upload文件夹中    1--简单模式，上传到WebConfig指定文件夹中   2---临时处理模式上传到临时文件夹
+            uploadType: '1',//上传处理方式 1-----Ajax上传处理（默认）  2----WebSocket上传处理（主要用于应对单文件上传）
             subfolder: '',//指定后台保存的子文件夹
             more: false, //是否支持多个文件
             debug: true, //如果是调试模式，指定输出内容
@@ -198,14 +202,6 @@
                         loaded = i;
                     }, 100);
 
-                    //for (var i = 0; i < fileList.length; i++) {
-                    //    var file = fileList[i];
-                    //    //文件类型验证
-                    //    if (checkExt(file.name, _opts) == false)
-                    //        continue;
-                    //    //读取图片并处理
-                    //    _this.bindImgDouble(file);
-                    //}
                 } else {
                     var file = fileList[0];
                     //文件类型验证
@@ -297,7 +293,7 @@
             }
         }
     }
-    /***************对话框处理**************/
+    /******************************对话框处理*****************************/
     //操作处理，变量定义
     function coverUploader(loader) {
         var _this = this;
@@ -1019,22 +1015,101 @@
             this.cover.destroy();
         }
     }
-    //指定DataUrl 上传图片文件
-    /*
-    * imgType:图片类型 'image/jpg','image/png','image/gif'
+
+
+
+    /******************************上传处理操作封装*****************************/
+    /**
+    * 文件上传统一处理，对象封装
     */
-    function uploadImg(loader, dataUrl, imgType, onSuccess, onError) {
-        var _opts = loader.opts;
-        var data = dataUrl.split(',')[1];
-        data = window.atob(data);
-        var array = new Uint8Array(data.length)
-        for (var i = 0; i < data.length; i++) {
-            array[i] = data.charCodeAt(i);
+    function UploadHandle(uploader, options) {
+        this.loader = uploader;
+        //默认值定义
+        var defaults = {
+            data: [],//上传的文件数据
+            isImg: uploader.opts.isImg,//上传类型处理，1----普通文件上传 2---图片文件上传
+            uploadType: uploader.opts.uploadType,//指定上传类型
+            /*
+            * imgType:图片类型 'image/jpg','image/png','image/gif'
+            */
+            imgType: 'image/png', //图片上传，指定图片类型
+            onSuccess: function (result) { },//上传成功触发,传入，服务器相应数据
+            onError: function () { console.error('上传异常空处理'); },//上传失败触发
         }
-        var blob = new Blob([array], { type: imgType });
-        //创建链接，提交图片
-        var socket = new MySocket(loader, undefined, undefined);
-        socket.onopen = function () {
+        this.opts = $.extend({}, defaults, options);
+        this.init();
+    }
+    UploadHandle.prototype = {
+        //自动处理上传
+        init: function () {
+            var _this = this;
+            var _opts = this.opts;
+            //判断是否是图片上传
+            if (_opts.isImg) {
+                //判断上传类型处理
+                if (_opt.uploadType == 1) {
+                    //使用ajax方式上传
+                    _this.ajaxImg();
+                } else {
+                    //使用scoket 方式上传
+                    _this.socketImg();
+                }
+            } else {
+
+            }
+        },
+        //使用Ajax方式上传图片
+        ajaxImg: function () {
+
+        },
+        /*
+        * socket方式 上传图片处理
+        * 指定DataUrl 上传图片文件
+        */
+        socketImg: function () {
+            var _this = this;
+            var _loader = this.loader;
+            var _opts = loader.opts;
+
+            //获取可发送的图片数据
+            var blog = _this.getBlob();
+            //创建链接，提交图片
+            var socket = new MySocket(loader, undefined, undefined);
+            socket.onopen = function () {
+                //先发送文件信息
+                socket.send(JSON.stringify(_this.getFilInfo()));
+                //发送数据
+                socket.send(blob);
+            }
+            var loaded = 0;
+            socket.onmessage = function (data) {
+                var result = JSON.parse(data);
+                loaded += result.curLength || 0;
+                if (loaded >= blob.size) {
+                    //上传成功后自动关闭
+                    socket.close();
+                    _opts.onSuccess(result);
+                }
+            }
+        },
+        //解析图片数据，为blob
+        getBlob: function () {
+            var _opts = this.opts;
+
+            var dataUrl = _opts.data;
+            var data = dataUrl.split(',')[1];
+            data = window.atob(data);
+            var array = new Uint8Array(data.length)
+            for (var i = 0; i < data.length; i++) {
+                array[i] = data.charCodeAt(i);
+            }
+            var blob = new Blob([array], { type: _opts.imgType });
+
+            return blob;
+        },
+        //获取上传发送的文件基本信息
+        getFilInfo: function () {
+            var _opts = this.loader.opts;
             //发送文件信息
             var fileInfo = {
                 oldName: '前台处理图片' + _opts.targetExt, //上传的文件名称
@@ -1043,21 +1118,11 @@
                 handleType: _opts.handleType,//当前上传的后台处理模式  1. single 简单处理模式 2.temporary 带临时处理
                 other: '',//上传的其他参数或说明,保留
             };
-            socket.send(JSON.stringify(fileInfo));
-            //发送数据
-            socket.send(blob);
-        }
-        var loaded = 0;
-        socket.onmessage = function (data) {
-            var result = JSON.parse(data);
-            loaded += result.curLength || 0;
-            if (loaded >= blob.size) {
-                //上传成功后自动关闭
-                socket.close();
-                onSuccess(result);
-            }
+            return fileInfo;
         }
     }
+   
+
 
 
     /***************上传读取对象,指定单个文件**************/
@@ -1306,7 +1371,51 @@
         }
     };
 
-    /**************WebSocket操作对象************/
+
+    /**************Ajax 传输操作对象************/
+    function MyAjax(upload, reader, onSuccess) {
+        this.uploader = upload;
+        this.reader = reader;
+        var _opts = this.uploader.opts;
+        this.onSuccess = onSuccess;
+        this.debug = _opts.debug;
+
+        //连接验证
+        var url = _opts.url;
+        if (url == undefined || url.length <= 0)
+        {
+            alert('ajax提交连接地址不能空');
+            return;
+        }
+        this.url = url;
+        this.xhr = new XMLHttpRequest();
+        //初始化绑定
+        this.bind();
+    }
+    MyAjax.prototype = {
+        //初始化绑定
+        bind: function () {
+            var _this = this;
+            var reader = this.reader;
+            var xhr = this.xhr;
+            //打开链接
+            xhr.open('post', _this.url, true);
+            //监听发送数据
+
+            //执行发送
+        },
+        //当连接打开成功
+        onopen: function () { },
+        //服务端相应数据
+        onmessage: function (data) { },
+        //关闭链接,终止发送
+        onclose: function () {
+            this.xhr.abort();
+        }
+    };
+
+
+    /**************WebSocket 传输操作对象************/
     function MySocket(upload, reader, onSuccess) {
         var _this = this;
         this.uploader = upload;
@@ -1389,6 +1498,8 @@
             }
         }
     }
+
+
 
     //扩展名 验证,返回bool 值
     function checkExt(val, opts) {
