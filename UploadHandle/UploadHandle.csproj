@@ -56,9 +56,9 @@
     <Content Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\NewWork2017\原框架\商城系统\Common\Common.csproj">
+    <ProjectReference Include="..\..\..\NewWork\原框架\MemberDBV2.2\Common\WebCommon.csproj">
       <Project>{f230ec8b-4f93-4866-8b04-93b43900b7a6}</Project>
-      <Name>Common</Name>
+      <Name>WebCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

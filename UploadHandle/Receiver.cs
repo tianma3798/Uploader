@@ -12,7 +12,7 @@ using System.Web.WebSockets;
 namespace UploadHandle
 {
     /// <summary>
-    /// 服务端接收文件封装
+    /// 服务端接收文件封装，此使用WebScoket方式接收文件
     /// </summary>
     public class Receiver
     {
@@ -67,7 +67,7 @@ namespace UploadHandle
         /// 构造函数
         /// </summary>
         /// <param name="subfolder">子文件夹</param>
-        public Receiver(string subfolder):base()
+        public Receiver(string subfolder) : base()
         {
             this.SubFolder = subfolder;
         }
