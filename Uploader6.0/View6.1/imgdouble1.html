@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Scripts/jquery-1.11.3.min.js"></script>
+    <link href="../Scripts/Uploader6.1/Uploader6.1.css" rel="stylesheet" />
+    <script src="../Scripts/Uploader6.1/Uploader6.1.js"></script>
+</head>
+<body>
+    <br /><br /><br />
+    <div class="uploader uploader-default" id="uploadBtn"></div>
+    <br />
+    <br /><br />
+    <div>
+        上传文件名：
+        <span id="name"></span>
+        <br />
+        <br />
+        小图片：<img id="img1" />
+        <br />
+        <br />
+        大图片：<img id="img2" />
+    </div>
+
+    <script>
+       ///*
+       // * 使用websocket方式  指定数据传输
+       // */
+       // var uploader = $('#uploadBtn').uploader({
+       //     url: 'ws://localhost:63588/ashx/upload.ashx',
+       //     fileExts: 'jpg;png',
+       //     text: '上传图片',
+       //     more: false,//是否可以上传多个
+       //     auto: true, //是否自动上传
+       //     type: 'imgdouble',
+       //     uploadType: 2, // 指定上传 方式
+       //     minWidth: 100,
+       //     minHeight: 100,
+       //     maxWidth: 500,
+       //     maxHeight: 500,
+       //     //handleType: '1',//对于大小图模式最好不要自动处理
+       //     onSuccess: function (data) {
+       //         console.info(data);
+       //         $('#img1').attr('src', data.small.relativeName).hide().fadeIn('normal');
+       //         setTimeout(function () {
+       //             $('#img2').attr('src', data.big.relativeName).hide().fadeIn('normal');
+       //         }, 500);
+       //     }
+       // });
+
+
+
+
+        /*
+         * 使用ajax方式  指定数据传输
+         */
+        var uploader = $('#uploadBtn').uploader({
+            url: '../ashx/upload_ajax.ashx',
+            fileExts: 'jpg;png',
+            text: '上传图片',
+            more: false,//是否可以上传多个
+            auto: true, //是否自动上传
+            type: 'imgdouble',
+            uploadType: 1, // 指定上传 ajax方式
+            minWidth: 100,
+            minHeight: 100,
+            maxWidth: 500,
+            maxHeight: 500,
+            //handleType: '1',//对于大小图模式最好不要自动处理
+            onSuccess: function (data) {
+                console.info(data);
+                $('#img1').attr('src', data.small.relativeName).hide().fadeIn('normal');
+                setTimeout(function () {
+                    $('#img2').attr('src', data.big.relativeName).hide().fadeIn('normal');
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -20,3 +20,7 @@
 
 
 #-----2017-8-12 添加Ajax接收文件处理
+1.新增AjaxReceiver 接收操作处理
+2.SuccessInfo 接收成功响应信息
+3.ErrorInfo 接收出错信息
+

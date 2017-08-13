@@ -73,6 +73,7 @@
     <Content Include="Content\Css\CommonCss1.0.css" />
     <Content Include="packages.config" />
     <Content Include="Ashx\upload.ashx" />
+    <Content Include="Ashx\upload_ajax.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -93,11 +94,13 @@
     <Content Include="Scripts\less.min.js" />
     <Content Include="Scripts\other.js" />
     <Content Include="Scripts\Uploader6.1\cursor_drag.ico" />
-    <Content Include="Scripts\Uploader6.1\Uploader6.0.css" />
-    <Content Include="Scripts\Uploader6.1\Uploader6.0.js" />
+    <Content Include="Scripts\Uploader6.1\Uploader6.1.css" />
+    <Content Include="Scripts\Uploader6.1\Uploader6.1.js" />
     <Content Include="Scripts\Uploader\cursor_drag.ico" />
     <Content Include="Scripts\Uploader\Uploader6.0.css" />
     <Content Include="Scripts\Uploader\Uploader6.0.js" />
+    <Content Include="View6.1\dialog1.html" />
+    <Content Include="View6.1\imgdouble1.html" />
     <Content Include="View\dialog3.html" />
     <Content Include="View\dialog2.html" />
     <Content Include="View\dialog1.html" />
@@ -114,6 +117,9 @@
   <ItemGroup>
     <Compile Include="Ashx\upload.ashx.cs">
       <DependentUpon>upload.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Ashx\upload_ajax.ashx.cs">
+      <DependentUpon>upload_ajax.ashx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

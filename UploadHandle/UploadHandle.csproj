@@ -32,6 +32,10 @@
     <DocumentationFile>bin\Release\UploadHandle.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\@DLL_Out\Common.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -46,20 +50,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AjaxReceiver.cs" />
     <Compile Include="AutoHandle.cs" />
+    <Compile Include="Info\ErrorInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Receiver.cs" />
-    <Compile Include="UploadInfo.cs" />
-    <Compile Include="UploadMsg.cs" />
+    <Compile Include="Info\SuccessInfo.cs" />
+    <Compile Include="Info\UploadInfo.cs" />
+    <Compile Include="Info\UploadMsg.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\NewWork\原框架\MemberDBV2.2\Common\WebCommon.csproj">
-      <Project>{f230ec8b-4f93-4866-8b04-93b43900b7a6}</Project>
-      <Name>WebCommon</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
