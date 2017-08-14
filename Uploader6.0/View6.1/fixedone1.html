@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Scripts/jquery-1.11.3.min.js"></script>
+    <link href="../Scripts/Uploader6.1/Uploader6.1.css" rel="stylesheet" />
+    <script src="../Scripts/Uploader6.1/Uploader6.1.js"></script>
+</head>
+<body>
+    <br /><br /><br />
+    <div class="uploader uploader-default" id="uploadBtn"></div>
+    <br />
+    <br /><br />
+    <div>
+        上传文件名：
+        <span id="name"></span>
+        <br />
+        <br />
+        本地图片：<img id="img1" />
+        <br />
+        <br />
+        上传后的图片：<br /><img id="img2" />
+    </div>
+
+    <script>
+        /*
+         * 使用WebScoket方式  指定数据传输
+         */
+        var uploader = $('#uploadBtn').uploader({
+            url: 'ws://localhost:63588/ashx/upload.ashx',
+            fileExts: 'jpg;png',
+            text: '上传图片',
+            more: true,//是否可以上传多个
+            auto: true, //是否自动上传
+            type: 'fixedone',
+            background: '#f00', //制定空白处理颜色
+            maxWidth: 500,
+            maxHeight: 500,
+            onSuccess: function (data) {
+                console.info(data);
+                //     $('#img1').attr('src', data.small.relativeName).hide().fadeIn('normal');
+                $('#img2').attr('src', data.relativeName).hide().fadeIn('normal');
+            }
+        });
+
+        ///*
+        // * 使用ajax方式  指定数据传输
+        // */
+        //var uploader = $('#uploadBtn').uploader({
+        //    url: '../ashx/upload_ajax.ashx',
+        //    fileExts: 'jpg;png',
+        //    text: '上传图片',
+        //    more: true,//是否可以上传多个
+        //    auto: true, //是否自动上传
+        //    type: 'fixedone',
+        //    background: '#f00', //制定空白处理颜色
+        //    maxWidth: 500,
+        //    maxHeight: 500,
+        //    onSuccess: function (data) {
+        //        console.info(data);
+        //        //     $('#img1').attr('src', data.small.relativeName).hide().fadeIn('normal');
+        //        $('#img2').attr('src', data.relativeName).hide().fadeIn('normal');
+        //    }
+        //});
+    </script>
+</body>
+</html>

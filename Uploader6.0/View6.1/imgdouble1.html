@@ -62,12 +62,8 @@
             more: false,//是否可以上传多个
             auto: true, //是否自动上传
             type: 'imgdouble',
-            uploadType: 1, // 指定上传 ajax方式
-            minWidth: 100,
-            minHeight: 100,
             maxWidth: 500,
             maxHeight: 500,
-            //handleType: '1',//对于大小图模式最好不要自动处理
             onSuccess: function (data) {
                 console.info(data);
                 $('#img1').attr('src', data.small.relativeName).hide().fadeIn('normal');

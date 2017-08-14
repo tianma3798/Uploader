@@ -23,6 +23,14 @@
             alert(str);
         }
     }
+    var UPLOADTYPE = {
+        single: 'single',
+        dialog: 'dialog',
+        imgdouble: 'imgdouble',
+        fixedone:'fixedone'
+    }
+    window.UPLOADTYPE = UPLOADTYPE;
+
     //控件上传封装类
     var uploader = function (elem, opts) {
         var _this = this;
@@ -34,7 +42,7 @@
             * 1.简单形式(single,单纯上传文件，自动提交)
             * 2.对话框形式(dialog，需要图片剪切处理)
             * 3.前台压缩，大小图片上传 (imgdouble) ：不改变原图片的比例，在指定范围内等比例缩放，不修改图片内容 
-            * 4.前台最大比例，图片处理（scale）：固定比例缩放，最大化图片显示，剩余空间填充空白
+            * 4.前台最大比例，图片处理（fixedsize）：固定比例缩放，最大化图片显示，剩余空间填充空白
             */
             handleType: '0',//后台处理模式 0-自动模式，上传到网站upload文件夹中    1--简单模式，上传到WebConfig指定文件夹中   2---临时处理模式上传到临时文件夹
             uploadType: 1,//上传处理方式 1-----Ajax上传处理（默认）  2----WebSocket上传处理（主要用于应对单文件上传）
@@ -47,6 +55,7 @@
             maxHeight: 1000,//前台压缩时，最大高度
             minWidth: 300,//前台压缩时，最小宽度
             minHeight: 300,//前台压缩时，最小高度
+            background:'white',// 在使用到背景处理时的，默认背景
             tempFile: uploadCfg.tempFile,//设置临时文件夹
             auto: true,//是否自动上传文件
             isImg: true,//是否是图片，如果是图片提供预览功能
@@ -106,8 +115,9 @@
             //判断是否已经追加过
             if (_elem.next().hasClass('uploader_panel') == false)
                 _elem.after(getDivByClass("uploader_panel"));
+
             //绑定事件
-            if (_opts.type == 'imgdouble') {
+            if (_opts.type == UPLOADTYPE.imgdouble || _opts.type == UPLOADTYPE.fixedone) {
                 _this.initImgDouble();
             } else {
                 _this.bindBtn();
@@ -220,84 +230,149 @@
             var _this = this;
             var _opts = this.opts;
             var _elem = this.elem;
-            var canvas = document.getElementById('canvasImg');
-            var ctx = canvas.getContext('2d');
-
+            //读取文件
             var reader = new FileReader();
             reader.onload = function () {
                 var result = reader.result;
-                var img = new Image();
-                img.onload = function () {
-                    //图片处理,先处理和上传大图，在处理小图
-                    var iWidth = img.width;
-                    var iHeight = img.height;
-                    //最大宽度高度处理
-                    if (iWidth > _opts.maxWidth) {
-                        iHeight = iHeight * (_opts.maxWidth / iWidth);
-                        iWidth = _opts.maxWidth;
-                    }
-                    if (iHeight > _opts.maxHeight) {
-                        iWidth = iWidth * (_opts.maxHeight / iHeight);
-                        iHeight = _opts.maxHeight;
-                    }
-                    //上传图片 jpeg格式图片
-                    img.width = canvas.width = iWidth;
-                    img.height = canvas.height = iHeight;
-                    ctx.clearRect(0, 0, iWidth, iHeight);
-                    ctx.drawImage(img, 0, 0, iWidth, iHeight);
-                    var dataUrl = canvas.toDataURL('image/jpeg');
-                    //*****上传大图片
-                    _opts.targetExt = '.jpg';
-                    if (_opts.handleType != 0) {
-                        _opts.subfolder2 = '/big';
-                    }
-
-                    //大小图 分开上传
-                    _this.sendData(dataUrl, function (data) {
-                        var doubleResult = {};
-                        doubleResult.big = data;
-                        //小图处理
-                        if (iWidth > _opts.minWidth) {
-                            iHeight = iHeight * (_opts.minWidth / iWidth);
-                            iWidth = _opts.minWidth;
-                        }
-                        if (iHeight > _opts.minHeight) {
-                            iWidth = iWidth * (_opts.minHeight / iHeight);
-                            iHeight = _opts.minHeight;
-                        }
-                        //上传jpeg格式 小图片
-                        img.width = canvas.width = iWidth;
-                        img.height = canvas.height = iHeight;
-                        ctx.clearRect(0, 0, iWidth, iHeight);
-                        ctx.drawImage(img, 0, 0, iWidth, iHeight);
-                        dataUrl = canvas.toDataURL('image/jpeg');
-                        //提交图片
-                        if (_opts.handleType != 0) {
-                            _opts.subfolder2 = '/small';
-                        }
-                        //发送小图片
-                        _this.sendData(dataUrl, function (data) {
-                            //小图上传成功
-                            doubleResult.small = data;
-                            _this.imgDoubleSuccess(doubleResult);
-                            if (onSuccess)
-                                onSuccess(data);
-                        });
-                    });
-
-                }
-                img.src = result;
+                new ImageFilter(_this, result, function (data) {
+                    if (_opts.onSuccess) _opts.onSuccess(data);
+                });
             }
             reader.readAsDataURL(file);
-        },
-        //单个文件图片上传成功
-        imgDoubleSuccess: function (data) {
+        }
+    }
+
+
+    /******************************Image 上传过滤处理*****************************/
+    function ImageFilter(uploader, dataUrl, onSuccess) {
+        this.uploader = uploader;
+        this.onSuccess = onSuccess;
+        this.opts = uploader.opts;
+        this.canvas = document.getElementById('canvasImg');
+        this.ctx = this.canvas.getContext('2d');
+        //创建图片对象
+        var _this = this;
+        var img = new Image();
+        img.onload = function () {
+            _this.onload();
+        }
+        img.src = dataUrl;
+        this.img = img;
+    }
+    ImageFilter.prototype = {
+        //创建图片成功
+        onload: function () {
             var _this = this;
             var _opts = this.opts;
-            //触发事件
-            if (_opts.onSuccess) {
-                _opts.onSuccess(data);
+            //根据类型处理
+            if (_opts.type == UPLOADTYPE.imgdouble) {
+                _this.double();
+            } else if (_opts.type == UPLOADTYPE.fixedone) {
+                _this.fixed();
             }
+        },
+        //图片固定大小处理
+        fixed: function () {
+            var _this = this;
+            var _opts = this.opts;
+            var canvas = this.canvas;
+            var ctx = this.ctx;
+            var img = this.img;
+            //处理逻辑,确定canvas的大小maxWidth/maxHeight，按比例，居中图片处理,背景默认使用白色
+            canvas.width = _opts.maxWidth;
+            canvas.height = _opts.maxHeight;
+            ctx.fillStyle = _opts.background;
+            ctx.rect(0, 0, canvas.width, canvas.height);
+            ctx.fill();
+
+            //图片最大化缩放
+            var iWidth = img.width;
+            var iHeight = img.height;
+            if (iWidth > _opts.maxWidth) {
+                iHeight = iHeight * (_opts.maxWidth / iWidth);
+                iWidth = _opts.maxWidth;
+            }
+            if (iHeight > _opts.maxHeight) {
+                iWidth = iWidth * (_opts.maxHeight / iHeight);
+                iHeight = _opts.maxHeight;
+            }
+            img.width = iWidth;
+            img.height = iHeight;
+            var left = (canvas.width - iWidth) / 2;
+            var top = (canvas.height - iHeight) / 2;
+            ctx.drawImage(img, left, top, iWidth, iHeight);
+            var dataUrl = canvas.toDataURL('image/jpeg');
+
+            //发送服务器
+            _opts.targetExt = '.jpg';
+            _this.sendData(dataUrl, function (data) {
+                if (_this.onSuccess) _this.onSuccess(data);
+            });
+        },
+        //大，小图
+        double: function () {
+            var _this = this;
+            var img = this.img;
+            var canvas = this.canvas;
+            var ctx = this.ctx;
+            var _opts = this.opts;
+            //图片处理,先处理和上传大图，在处理小图
+            var iWidth = img.width;
+            var iHeight = img.height;
+            //最大宽度高度处理
+            if (iWidth > _opts.maxWidth) {
+                iHeight = iHeight * (_opts.maxWidth / iWidth);
+                iWidth = _opts.maxWidth;
+            }
+            if (iHeight > _opts.maxHeight) {
+                iWidth = iWidth * (_opts.maxHeight / iHeight);
+                iHeight = _opts.maxHeight;
+            }
+            //*****上传大图片
+            var dataUrl = _this.getDataURL(iWidth, iHeight);
+            _opts.targetExt = '.jpg';
+            if (_opts.handleType != 0) {
+                _opts.subfolder2 = '/big';
+            }
+            //大小图 分开上传
+            _this.sendData(dataUrl, function (data) {
+                var doubleResult = {};
+                doubleResult.big = data;
+                //小图处理
+                if (iWidth > _opts.minWidth) {
+                    iHeight = iHeight * (_opts.minWidth / iWidth);
+                    iWidth = _opts.minWidth;
+                }
+                if (iHeight > _opts.minHeight) {
+                    iWidth = iWidth * (_opts.minHeight / iHeight);
+                    iHeight = _opts.minHeight;
+                }
+                //提交图片
+                dataUrl = _this.getDataURL(iWidth, iHeight);
+                if (_opts.handleType != 0) {
+                    _opts.subfolder2 = '/small';
+                }
+                //发送小图片
+                _this.sendData(dataUrl, function (data) {
+                    //小图上传成功
+                    doubleResult.small = data;
+                    //触发上传成功事件
+                    if (_this.onSuccess) _this.onSuccess(doubleResult);
+                });
+            });
+        },
+        //重绘图片到canvas
+        getDataURL: function (iWidth, iHeight) {
+            var img = this.img;
+            var canvas = this.canvas;
+
+            img.width = canvas.width = iWidth;
+            img.height = canvas.height = iHeight;
+
+            this.ctx.clearRect(0, 0, iWidth, iHeight);
+            this.ctx.drawImage(img, 0, 0, iWidth, iHeight);
+            var dataUrl = canvas.toDataURL('image/jpeg');
+            return dataUrl;
         },
         //发送图片文件统一处理
         sendData: function (dataUrl, onSuccess) {
@@ -312,20 +387,11 @@
     }
 
 
-
-
-
-
-
-
-
-    /***************上传读取对象,指定单个文件**************/
-            /**
-        * 指定file 分段读取处理上传
-        */
+    /******************************上传读取对象,指定单个文件,分段上传*****************************/
     function MyReader(file, loader, enableRead) {
         var _this = this;
         this.uploader = loader;
+        this.uploadType = loader.opts.uploadType;
         this.file = file;
         this.step = 1024 * 256;//每次读取文件的大小
         this.loaded = 0;//当前已经上传成功的大小
@@ -339,6 +405,8 @@
         if (this.check()) {
             //初始化显示
             this.init();
+            //如果是Ajax提交则读取间隔加大
+            if (this.uploadType == 1) this.step = 1024 * 1024;
             if (_this.enableRead) {
                 _this.start();
             }
@@ -408,20 +476,82 @@
         start: function () {
             var _this = this;
             _this.enableRead = true;
-  
+            if (_this.uploadType == 1) {
+                _this.startAjax();
+            } else {
+                _this.startScoket();
+            }
+        },
+         /**
+        * 使用Ajax方式 处理数据传输
+        */
+        startAjax: function () {
+            var _this = this;
+            //开始读取
+            var reader = this.reader = new FileReader();
+            //读取成功执行发送
+            reader.onload = function (e) {
+                _this.readed += e.loaded;
+                var blob = new Blob([reader.result]);
+                //第一次发送先发送文件信息
+                if (_this.sending == false) {
+                    //创建ajax链接发送文件信息
+                    sendData(null, null, function (data) {
+                        sendData(blob, data);
+                    });
+                    _this.sending = true;
+                } else {
+                    //创建 ajax链接发送数据
+                    sendData(blob, _this.result);
+                }
+            }
+            _this.readBlob();
+
+            //执行发送操作
+            function sendData(blob, backInfo, onSuccess) {
+                var ajax = new MyAjax(_this.uploader);
+                if (backInfo)
+                    ajax.send(blob, _this.result);
+                else
+                    ajax.sendInfo(_this.getFileInfo());
+                ajax.onmessage = function (data) {
+                    _this.result = data;
+                    if (onSuccess)
+                        onSuccess(data);
+                    else {
+                        //进度条显示处理
+                        _this.loaded += data.curLength;
+                        _this.showStatus();
+                        if (_this.readed >= _this.total) {
+                            //读取结束
+                            _this.sendSuccess();
+                        } else {
+                            //继续读取文件
+                            _this.readBlob();
+                        }
+                    }
+                }
+            }
         },
         /**
         * 使用WebScoket方式 处理数据传输
         */
         startScoket: function () {
             var _this = this;
+            var reader = this.reader = new FileReader();
             //创建链接对象，一个读取实例、一个链接
             var socket = new MySocket(_this.uploader, this);
             this.socket = socket;
             //打开成功
             socket.onopen = function () {
+                //段读取成功
+                reader.onload = function (e) {
+                    //继续发送
+                    _this.readed += e.loaded;
+                    _this.readedScocket();
+                }
                 //开始读取
-                _this.bindReader();
+                _this.readBlob();
             }
             //接收文件成功
             socket.onmessage = function (data) {
@@ -444,56 +574,43 @@
                 }
             }
         },
-        //绑定reader
-        bindReader: function () {
+        //绑定WebScoket方式的读取
+        readedScocket: function () {
+            //读取成功处理
             var _this = this;
-            var reader = this.reader = new FileReader();
-            //段读取成功
-            reader.onload = function (e) {
-                //继续发送
-                //如果没有完成，继续读取
-                _this.readed += e.loaded;
-                _this.sendData();
-                if (_this.readed < _this.total) {
-                    // _this.readBlob();
-                    //根据当前缓冲区控制客户端读取速度
-                    if (_this.socket.ws.bufferedAmount > 1204 * 1024 * 2) {
-                        //console.info('发送缓存区：' + _this.socket.ws.bufferedAmount);
-                        var thisTimer = setInterval(function () {
-                            //console.log('------>进入200毫秒等待');
-                            if (_this.socket.ws.bufferedAmount <= 1204 * 1024) {
-                                console.log('------>进入等待结束');
-                                clearInterval(thisTimer);
-                                //继续发送
-                                _this.readBlob();
-                            }
-                        }, 10);
-                    } else {
-                        //继续发送
-                        _this.readBlob();
-                    }
-                } else {
-                    if (_this.debug)
-                        console.log('总读取：' + _this.readed + ',用时：' + (new Date().getTime() - _this.startTime.getTime()) / 1000);
-                }
-            }
-            //开始读取
-            _this.readBlob();
-        },
-        //读取成功操作
-        sendData: function () {
-            var _this = this;
-            var _opts = this.uploader.opts;
             var reader = this.reader;
-            var socket = this.socket;
-            //将分段数据上传到服务器
-            var blob = reader.result;
-            if (_this.sending == false) {
-                //第一次发送文件信息
-                socket.send(JSON.stringify(fileInfo));
-                _this.sending = true;
+            var _socket = this.socket;
+            //如果没有完成，继续读取
+            sendData();
+            if (_this.readed < _this.total) {
+                //根据当前缓冲区控制客户端读取速度
+                if (_socket.ws.bufferedAmount > 1204 * 1024 * 2) {
+                    var thisTimer = setInterval(function () {
+                        if (_socket.ws.bufferedAmount <= 1204 * 1024) {
+                            clearInterval(thisTimer);
+                            //继续发送
+                            _this.readBlob();
+                        }
+                    }, 10);
+                } else {
+                    //继续发送
+                    _this.readBlob();
+                }
+            } else {
+                if (_this.debug)
+                    console.log('总读取：' + _this.readed + ',用时：' + (new Date().getTime() - _this.startTime.getTime()) / 1000);
             }
-            socket.send(blob);
+            //执行发送操作
+            function sendData() {
+                //将分段数据上传到服务器
+                var blob = reader.result;
+                if (_this.sending == false) {
+                    //第一次发送文件信息
+                    _socket.send(JSON.stringify(_this.getFileInfo()));
+                    _this.sending = true;
+                }
+                _socket.send(blob);
+            }
         },
         //上传成功
         onSendSuccess: function () { },
@@ -562,14 +679,14 @@
             var _this = this;
             //关闭读取
             _this.stop();
-            //关闭上传
-            _this.socket.close();
+            //关闭上传链接
+            if (_this.uploadType == 2)
+                _this.socket.close();
         },
         //获取文件信息 
         getFileInfo: function () {
             var _this = this;
-            var _this = this.opts;
-
+            var _opts = this.uploader.opts;
             var fileInfo = {
                 oldName: _this.file.name, //上传的文件名称
                 newName: _this.newName,//后台生成的文件名称
@@ -578,14 +695,11 @@
                 handleType: _opts.handleType,//当前上传的后台处理模式  1. single 简单处理模式 2.temporary 带临时处理
                 other: '',//上传的其他参数或说明,保留
             };
-            return _this;
+            return fileInfo;
         }
     };
 
-    /******************************上传处理操作封装*****************************/
-    /**
-    * 指定文件数据DataURL ，单个文件一次性上传
-    */
+    /******************************指定文件数据DataURL ，单个文件一次性上传*****************************/
     function UploadData(uploader, options) {
         this.loader = uploader;
         //默认值定义
@@ -618,7 +732,7 @@
                     _this.socketImg();
                 }
             } else {
-
+                console.error("当前类型不是图片");
             }
         },
         //使用Ajax方式上传图片
@@ -690,6 +804,7 @@
         getFileInfo: function () {
             var _this = this;
             var _opts = this.loader.opts;
+
             //发送文件信息
             var fileInfo = {
                 oldName: '前台处理图片' + _opts.targetExt, //上传的文件名称
@@ -745,7 +860,6 @@
                     _this.onerror('服务器处理出错 ，' + xhr.responseText, xhr);
                 }
             }
-            //执行发送
         },
         //当连接打开成功
         onopen: function () { },
@@ -778,7 +892,6 @@
                 var fd = new FormData();
                 fd.append('file', data);
                 fd.append('backinfo', JSON.stringify(backInfo));
-
                 this.xhr.send(fd);
             } catch (e) {
                 console.error(e);

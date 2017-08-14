@@ -34,7 +34,7 @@
   <ItemGroup>
     <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\@DLL_Out\Common.dll</HintPath>
+      <HintPath>..\..\..\自开发工具\DLL_Common\Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

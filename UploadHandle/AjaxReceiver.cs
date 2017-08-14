@@ -148,6 +148,8 @@ namespace UploadHandle
                     SendSuccess("接收文件完毕");
                     OnSuccess?.Invoke(this.file);
                 }
+                else
+                    SendSuccess("正在接受...");
             }
             catch (Exception ex)
             {
