@@ -266,13 +266,13 @@
             var _opts = this.opts;
             //根据类型处理
             if (_opts.type == UPLOADTYPE.imgdouble) {
-                _this.double();
+                _this.doubleHandle();
             } else if (_opts.type == UPLOADTYPE.fixedone) {
-                _this.fixed();
+                _this.fixedHandle();
             }
         },
         //图片固定大小处理
-        fixed: function () {
+        fixedHandle: function () {
             var _this = this;
             var _opts = this.opts;
             var canvas = this.canvas;
@@ -310,7 +310,7 @@
             });
         },
         //大，小图
-        double: function () {
+        doubleHandle: function () {
             var _this = this;
             var img = this.img;
             var canvas = this.canvas;
@@ -981,9 +981,6 @@
             }
         }
     }
-
-
-
 
 
     /******************************对话框处理*****************************/
