@@ -58,6 +58,7 @@
     <Compile Include="Info\SuccessInfo.cs" />
     <Compile Include="Info\UploadInfo.cs" />
     <Compile Include="Info\UploadMsg.cs" />
+    <Compile Include="ThumbnailHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />

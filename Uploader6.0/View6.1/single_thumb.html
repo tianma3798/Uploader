@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="../Scripts/jquery-1.11.3.min.js"></script>
+
+    <link href="../Scripts/Uploader6.1/Uploader6.1.css" rel="stylesheet" />
+    <script src="../Scripts/Uploader6.1/Uploader6.1.js"></script>
+</head>
+<body>
+    <br /><br /><br />
+    <div>
+        上传文件名：
+        <span id="name"></span>
+        <br />
+        <br />
+        相对目录： <span id="relativeName"></span>
+    </div>
+    <br /><br /><br />
+    <div class="uploader uploader-default" id="uploadBtn"></div>
+    <br />小图：
+    <img id="small" />
+    <br /><br />大图：
+    <img id="big" />
+    <script>
+        /*******使用WebScoket 方式处理传输*******/
+        var uploader = $('#uploadBtn').uploader({
+            url: 'ws://localhost:63588/ashx/thumbnail.ashx',
+            fileExts: 'jpg;png;gif;',
+            text: '选择图片',
+            onSuccess: function (data) {
+                console.info(data);
+                $('#name').text(data.newName);
+                $('#relativeName').text(data.relativeName);
+
+                $('#small').attr('src', data.Data.small);
+                $('#big').attr('src', data.Data.big);
+            }
+        });
+
+        ///*******使用Ajax 方式处理传输*******/
+        //var uploader = $('#uploadBtn').uploader({
+        //    url: '../ashx/upload_ajax.ashx',
+        //    fileExts: '*',
+        //    text: '简单上传按钮',
+        //    onSuccess: function (data) {
+        //        console.info(data);
+        //        $('#name').text(data.newName);
+        //        $('#relativeName').text(data.relativeName);
+        //    }
+        //});
+    </script>
+   
+
+
+</body>
+</html>

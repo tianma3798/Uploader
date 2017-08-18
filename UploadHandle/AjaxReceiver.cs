@@ -125,7 +125,7 @@ namespace UploadHandle
         /// <param name="curLength"></param>
         private void AppendFile(byte[] buffer)
         {
-            string filename = this.file.GetRullName();
+            string filename = this.file.GetFullName();
             try
             {
                 FileStream fs = new FileStream(filename, FileMode.Append, FileAccess.Write);
@@ -159,7 +159,6 @@ namespace UploadHandle
                 else OnError(thisEx);
             }
         }
-
         /// <summary>
         /// 相应出错 信息
         /// </summary>

@@ -53,6 +53,10 @@ namespace UploadHandle
         /// </summary>
         public string UploadPath { get; set; }
         /// <summary>
+        /// 关联信息
+        /// </summary>
+        public object Data { get; set; }
+        /// <summary>
         /// 当前前台提交的文件对象
         /// </summary>
         private UploadMsg _UploadMsg { get; set; }
@@ -62,24 +66,24 @@ namespace UploadHandle
         public UploadInfo()
         {
         }
-        /// <summary>
-        /// 构造函数
-        /// 需要加载WebConfig中的上传节点
-        /// </summary>
-        /// <param name="OldName">旧文件名</param>
-        /// <param name="ContentLength">文件大小</param>
-        public UploadInfo(string OldName, int ContentLength, bool IsRename)
-        {
-            this.OldName = OldName;
-            this.ContentLength = ContentLength;
-            //如果是第一次创建链接需要创建新名称
-            if (IsRename)
-                this.NewName = UploadInfo.CreateNewName(Extention);
-            else
-                this.NewName = OldName;
-            //加载配置文件中上传文件夹
-            this.UploadPath = GetUploadFiles();
-        }
+        ///// <summary>
+        ///// 构造函数
+        ///// 需要加载WebConfig中的上传节点
+        ///// </summary>
+        ///// <param name="OldName">旧文件名</param>
+        ///// <param name="ContentLength">文件大小</param>
+        //public UploadInfo(string OldName, int ContentLength, bool IsRename)
+        //{
+        //    this.OldName = OldName;
+        //    this.ContentLength = ContentLength;
+        //    //如果是第一次创建链接需要创建新名称
+        //    if (IsRename)
+        //        this.NewName = UploadInfo.CreateNewName(Extention);
+        //    else
+        //        this.NewName = OldName;
+        //    //加载配置文件中上传文件夹
+        //    this.UploadPath = GetUploadFiles();
+        //}
         /// <summary>
         /// 根据客户端json信息，创建
         /// </summary>
@@ -93,12 +97,12 @@ namespace UploadHandle
             else
                 this.NewName = upMsg.NewName;
             _UploadMsg = upMsg;
-            if (upMsg.HandleType == 0)
+            if (upMsg.HandleType == HandleType.自动处理.GetHashCode())
             {
                 //自动模式，上传到网站upload文件夹
                 this.UploadPath = new AutoHandle(upMsg.SubFolder).GetAbsolutePath();
             }
-            else if (upMsg.HandleType == 1)
+            else if (upMsg.HandleType == HandleType.简单处理.GetHashCode())
             {
                 //简单处理模式，直接保存到指定uploadpath中
                 if (string.IsNullOrEmpty(AbolutePath))
@@ -106,7 +110,9 @@ namespace UploadHandle
                     //获取配置文件中的目录
                     string configPath = GetUploadFiles();
                     if (string.IsNullOrEmpty(upMsg.SubFolder) == false)
-                        configPath += upMsg.SubFolder + "/";
+                    {
+                        configPath += upMsg.SubFolder;
+                    }
                     if (Directory.Exists(configPath) == false)
                         Directory.CreateDirectory(configPath);
                     this.UploadPath = configPath;
@@ -178,9 +184,17 @@ namespace UploadHandle
         /// 获取当前上传文件的绝对路径
         /// </summary>
         /// <returns></returns>
-        public string GetRullName()
+        public string GetFullName()
         {
             return this.UploadPath + this.NewName;
+        }
+        /// <summary>
+        /// 获取上传的子文件夹
+        /// </summary>
+        /// <returns></returns>
+        public string GetSubFolder()
+        {
+            return _UploadMsg.SubFolder;
         }
         /// <summary>
         /// 产生一个新的文件名

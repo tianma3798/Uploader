@@ -41,10 +41,6 @@ namespace UploadHandle
         /// </summary>
         private HttpContext _Context = null;
         /// <summary>
-        /// 错误日志记录
-        /// </summary>
-       // private LogHelper.LogHelper _log = new LogHelper.LogHelper();
-        /// <summary>
         /// 当前接收文件成功后出发
         /// </summary>
         public Action<UploadInfo> OnSuccess = null;
@@ -67,7 +63,7 @@ namespace UploadHandle
         /// 构造函数
         /// </summary>
         /// <param name="subfolder">子文件夹</param>
-        public Receiver(string subfolder) : base()
+        public Receiver(string subfolder) : this()
         {
             this.SubFolder = subfolder;
         }
@@ -102,7 +98,7 @@ namespace UploadHandle
                             if (upMsg == null)
                                 throw new HttpException(500, "服务器接收客户json数据失败");
                             if (string.IsNullOrEmpty(this.SubFolder) == false)
-                                upMsg.SubFolder = this.SubFolder;
+                                upMsg.SubFolder = this.SubFolder + "/" + upMsg.SubFolder;
                             _file = new UploadInfo(upMsg);
                             //接收文件信息成功
                             await SendSuccess("接收文件信息成功");
@@ -138,7 +134,7 @@ namespace UploadHandle
         /// <param name="curLength"></param>
         private void AppendFile(ArraySegment<byte> buffer, int curLength)
         {
-            string filename = _file.GetRullName();
+            string filename = _file.GetFullName();
             try
             {
                 FileStream fs = new FileStream(filename, FileMode.Append, FileAccess.Write);
@@ -160,7 +156,6 @@ namespace UploadHandle
             }
             catch (Exception ex)
             {
-                //_log.WriteLine("服务器保存文件出错，" + ex.Message);
                 throw new Exception("服务保存文件异常，" + ex.Message);
             }
         }
@@ -171,16 +166,11 @@ namespace UploadHandle
         /// <returns></returns>
         private async Task SendSuccess(string msg, int curLength = 0)
         {
-            string result = new
-            {
-                status = 1,
-                newName = _file.NewName,
-                relativeName = _file.GetRelativeName(),
-                curSize = curSize,
-                curLength = curLength,
-                msg = msg
-            }.ToJsonString(); ;
-            ArraySegment<byte> data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(result));
+            SuccessInfo result = new SuccessInfo(_file);
+            result.curSize = curSize;
+            result.curLength = curLength;
+            result.msg = msg;
+            ArraySegment<byte> data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(result.ToJsonString()));
             await _socket.SendAsync(data, WebSocketMessageType.Text, true, CancellationToken.None);
         }
         /// <summary>
@@ -193,14 +183,8 @@ namespace UploadHandle
             //触发异常
             if (OnError != null)
                 OnError(ex);
-            string result = new
-            {
-                status = 0,
-                newName = _file == null ? "" : _file.NewName,
-                relativeName = _file == null ? "" : _file.GetRelativeName(),
-                msg = ex.Message
-            }.ToJsonString();
-            ArraySegment<byte> data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(result));
+            ErrorInfo result = new ErrorInfo(_file, ex);
+            ArraySegment<byte> data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(result.ToJsonString()));
             await _socket.SendAsync(data, WebSocketMessageType.Text, true, CancellationToken.None);
         }
     }

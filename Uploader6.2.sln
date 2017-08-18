@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uploader6.0", "Uploader6.0\Uploader6.0.csproj", "{F9E28ED5-A6E6-424A-9880-231F825229EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uploader6.2", "Uploader6.0\Uploader6.2.csproj", "{F9E28ED5-A6E6-424A-9880-231F825229EE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadHandle", "UploadHandle\UploadHandle.csproj", "{F72CF7AC-B4CC-4F1B-978D-CE5005C5E04A}"
 EndProject
@@ -24,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {46A43E3D-BDBA-4437-84D1-14E9E28E2FC9}
 	EndGlobalSection
 EndGlobal

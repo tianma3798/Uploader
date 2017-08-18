@@ -40,7 +40,7 @@ namespace UploadHandle
         /// </summary>
         public string msg { get; set; }
 
-
+        public object Data { get; set; }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -50,6 +50,7 @@ namespace UploadHandle
             this.newName = file.NewName;
             this.relativeName = file.GetRelativeName();
             this.size = file.ContentLength;
+            this.Data = file.Data;
         }
 
         public SuccessInfo(AjaxReceiver rece,string msg) : this(rece.file)
