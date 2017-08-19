@@ -88,7 +88,7 @@ namespace Core_Test
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-      
+
         }
     }
 }

@@ -12,13 +12,13 @@ namespace Core_Test.Controllers
     {
         public void Ajax()
         {
-            AjaxReceiver _receive = new AjaxReceiver(this.HttpContext);
-            //接收文件成功
-            _receive.OnSuccess = (data) =>
-            {
-                Write(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
-            };
-            _receive.DoWork();
+AjaxReceiver _receive = new AjaxReceiver(this.HttpContext);
+//接收文件成功
+_receive.OnSuccess = (data) =>
+{
+    Write(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
+};
+_receive.DoWork();
         }
         public void Ajax_Thumb()
         {

@@ -1,6 +1,5 @@
 ﻿#Uploader6.2升级处理<br />
 1.重点上传图片，后台生成缩略图功能
-
 <pre>
       LogHelper.LogHelper _log = new LogHelper.LogHelper();
         public void ProcessRequest(HttpContext context)
@@ -38,6 +37,53 @@
             }
         }
 </pre>
+
+2.添加UploadHandleCore ，支持服务点Asp.Net Core
+-->ajax使用方式
+<pre>
+AjaxReceiver _receive = new AjaxReceiver(this.HttpContext);
+//接收文件成功
+_receive.OnSuccess = (data) =>
+{
+    Write(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
+};
+_receive.DoWork();</pre>
+-->Websocket方式,需要在启动Startup的configure中，注入监听
+<pre>
+//绑定WebSocket处理，接收成功后，生成缩略图
+app.Map("/common/socket_thumb", (con) =>
+{
+    con.UseWebSockets();//启用webscoket
+    con.Use((ctx, n) =>
+    {
+        Receiver _receive = new Receiver(ctx, "imgdata/origin");
+        _receive.OnSuccess += (data) =>
+        {
+            //接收文件成功后，自动生成缩略图
+            // 大图
+            ThumbnailHandle _thumb = new ThumbnailHandle(data, "big", 920);
+            _thumb.AutoHandle();
+            string big = _thumb.GetRelativeName();
+            CommonController.Write("大图位置：" + big);
+
+            //小图
+            _thumb.Width = 320;
+            _thumb.Folder = "small";
+            _thumb.AutoHandle();
+            string small = _thumb.GetRelativeName();
+            CommonController.Write("小图位置：" + small);
+
+            data.Data = new { big = big, small = small };
+
+            //此处，有需要的情况下，执行数据库操作
+            CommonController.Write(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
+        };
+        return _receive.DoWork();
+    });
+});
+</pre>
+
+
 
 #Uploader6.1 升级处理<br/>
 1.重点更新，添加Ajax传输方式处理，对于大多中小文件的上传都支持<br/>
