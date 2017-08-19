@@ -36,10 +36,6 @@ namespace UploadHandle
         /// </summary>
         public long size { get; set; }
         /// <summary>
-        /// 处理类型
-        /// </summary>
-        public int handleType { get; set;}
-        /// <summary>
         /// 消息备注
         /// </summary>
         public string msg { get; set; }
@@ -47,6 +43,10 @@ namespace UploadHandle
         /// 附加信息
         /// </summary>
         public object Data { get; set; }
+        /// <summary>
+        /// 后台处理类型
+        /// </summary>
+        public int handleType { get; set; }
         /// <summary>
         /// 构造函数
         /// </summary>

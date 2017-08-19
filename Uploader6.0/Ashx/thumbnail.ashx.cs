@@ -11,7 +11,6 @@ namespace Uploader6._0.Ashx
     /// </summary>
     public class thumbnail : IHttpHandler
     {
-
         LogHelper.LogHelper _log = new LogHelper.LogHelper();
         public void ProcessRequest(HttpContext context)
         {
@@ -43,7 +42,6 @@ namespace Uploader6._0.Ashx
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

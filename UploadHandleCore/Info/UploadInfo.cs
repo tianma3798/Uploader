@@ -75,10 +75,12 @@ namespace UploadHandle
         {
             this.OldName = upMsg.OldName;
             this.ContentLength = upMsg.Size;
+
             if (string.IsNullOrEmpty(upMsg.NewName))
                 this.NewName = UploadInfo.CreateNewName(Extention);
             else
                 this.NewName = upMsg.NewName;
+
             _UploadMsg = upMsg;
             if (upMsg.HandleType == HandleType.自动处理.GetHashCode())
             {
@@ -91,14 +93,7 @@ namespace UploadHandle
                 if (string.IsNullOrEmpty(AbolutePath))
                 {
                     //获取配置文件中的目录
-                    string configPath = GetUploadFiles();
-                    if (string.IsNullOrEmpty(upMsg.SubFolder) == false)
-                    {
-                        configPath += upMsg.SubFolder;
-                    }
-                    if (Directory.Exists(configPath) == false)
-                        Directory.CreateDirectory(configPath);
-                    this.UploadPath = configPath;
+                    this.UploadPath = ServerInfo.GetSub(upMsg.SubFolder); ;
                 }
                 else
                 {
@@ -111,33 +106,7 @@ namespace UploadHandle
                 this.UploadPath = GetTempFile();
             }
         }
-        /// <summary>
-        /// 构造函数，指定存储文件夹
-        /// </summary>
-        /// <param name="OldName">旧文件名</param>
-        /// <param name="ContentLength">文件大小</param>
-        /// <param name="UploadPath">上传文件夹</param>
-        public UploadInfo(string OldName, int ContentLength, string UploadPath)
-        {
-            this.OldName = OldName;
-            this.ContentLength = ContentLength;
-            this.NewName = UploadInfo.CreateNewName(Extention);
-            this.UploadPath = UploadPath;
-        }
-        /// <summary>
-        /// 获取当前要保存的文件的文件目录
-        /// </summary>
-        /// <param name="subFolder">子文件夹</param>
-        /// <returns></returns>
-        public string GetUploadFiles(string subFolder = null)
-        {
-            if (string.IsNullOrEmpty(subFolder))
-                return UploadPath;
-            DirectoryInfo info = new DirectoryInfo(UploadPath);
-            if (!info.Exists)
-                info.Create();
-            return info.CreateSubdirectory(subFolder).FullName;
-        }
+
         /// <summary>
         /// 获取当前上传文件的服务器相对路径
         /// </summary>
@@ -151,7 +120,7 @@ namespace UploadHandle
             else if (_UploadMsg.HandleType == 1)
             {
                 string newName = this.NewName;
-                return Path.Combine("/", _UploadMsg.SubFolder, newName);
+                return Path.Combine("/",_UploadMsg.SubFolder,newName);
             }
             else
             {
@@ -194,24 +163,10 @@ namespace UploadHandle
         /// <returns></returns>
         public static string GetTempFile()
         {
-            string tempfile = Common.ConfigValue.TempFile;
-            if (!Directory.Exists(tempfile))
-                Directory.CreateDirectory(tempfile);
+            string tempfile = ServerInfo.GetTemp();
             return tempfile;
         }
-        /// <summary>
-        /// 获取后台站点，上传用户的保存‘基础路径’
-        /// 如果需要前台用户保存的'基础路径'，则放在构造函数中指定
-        /// 对应WebConfig中的'B_UploadPath'
-        /// </summary>
-        /// <returns></returns>
-        public static string GetUploadFiles()
-        {
-            string path = Common.ConfigValue.UploadPath;
-            if (Directory.Exists(path) == false)
-                Directory.CreateDirectory(path);
-            return path;
-        }
+
         /// <summary>
         /// 判断指定文件是否在临时文件夹中存在
         /// </summary>
