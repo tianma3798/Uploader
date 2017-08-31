@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>UploadHandle</RootNamespace>
+    <Version>1.0.1</Version>
+    <Description>上传.NetCore 版；v1.0.1后台缩略图保存成jpeg修改</Description>
+    <Authors>天马3798</Authors>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

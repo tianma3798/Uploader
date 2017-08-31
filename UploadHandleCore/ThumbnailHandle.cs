@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.DrawingCore;
 using System.DrawingCore.Design;
+using System.DrawingCore.Drawing2D;
 
 namespace UploadHandle
 {
@@ -56,7 +57,6 @@ namespace UploadHandle
         /// </summary>
         public void AutoHandle()
         {
-
             Bitmap bitmap = new Bitmap(this.FullName);
             //保持图片的比例不变，缩放图片
             int width = this.Width,
@@ -71,12 +71,13 @@ namespace UploadHandle
                 //高度为大，计算宽度
                 width = Convert.ToInt32(height * (bitmap.Width * 1.0 / bitmap.Height));
             }
-
             Bitmap result = ResizeImage(bitmap, width, height);
-
+            if (result == null)
+                throw new Exception("缩放图片出现异常");
             string bigpath = GetFullName();
-            //保存图片
-            result.Save(bigpath);
+            bigpath = bigpath.Substring(0, bigpath.LastIndexOf(".")) + ".jpg";
+            //保存图片,指定保存 格式为Jpeg，占用空间会比较小
+            result.Save(bigpath, System.DrawingCore.Imaging.ImageFormat.Jpeg);
             result.Dispose();
             bitmap.Dispose();
         }
@@ -102,7 +103,6 @@ namespace UploadHandle
             }
             return fullname;
         }
-
 
 
         /// <summary>  

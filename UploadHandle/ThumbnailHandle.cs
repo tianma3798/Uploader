@@ -58,23 +58,25 @@ namespace UploadHandle
         {
             Bitmap bitmap = ImgHelper.GetBitmapForGra(this.FullName);
             //保持图片的比例不变，缩放图片
-            int width=this.Width,
-                height=this.Width;
+            int width = this.Width,
+                height = this.Width;
             if (bitmap.Width > bitmap.Height)
             {
                 //宽度为大,计算高度
-                height =Convert.ToInt32(width * (bitmap.Height * 1.0 / bitmap.Width));
+                height = Convert.ToInt32(width * (bitmap.Height * 1.0 / bitmap.Width));
             }
-            else {
+            else
+            {
                 //高度为大，计算宽度
-                width = Convert.ToInt32(height * (bitmap.Width * 1.0 / bitmap.Height)); 
+                width = Convert.ToInt32(height * (bitmap.Width * 1.0 / bitmap.Height));
             }
 
             Bitmap result = ImgHelper.ResizeImage(bitmap, width, height);
 
             string bigpath = GetFullName();
-            //保存图片
-            result.Save(bigpath);
+            bigpath = bigpath.Substring(0, bigpath.LastIndexOf(".")) + ".jpg";
+            //保存图片,指定保存 格式为Jpeg，占用空间会比较小
+            result.Save(bigpath, System.Drawing.Imaging.ImageFormat.Jpeg);
             result.Dispose();
             bitmap.Dispose();
         }
