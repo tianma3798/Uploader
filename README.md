@@ -1,10 +1,10 @@
-﻿#Asp.Net Core版
+﻿<h3>#Asp.Net Core版</h3>
 1.安装命令：
 <pre>
 Install-Package UploadHandleCore -Version 1.0.1
 </pre>
-2.Nuget 包地址：<a hre='https://www.nuget.org/packages/UploadHandleCore' target='_blank'></a>
-#Uploader6.2升级处理<br />
+2.Nuget 包地址：<a hre='https://www.nuget.org/packages/UploadHandleCore' target='_blank'>https://www.nuget.org/packages/UploadHandleCore</a> <br/>
+<h3>#Uploader6.2升级处理</h3><br />
 1.重点上传图片，后台生成缩略图功能
 <pre>
       LogHelper.LogHelper _log = new LogHelper.LogHelper();
