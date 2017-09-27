@@ -1,5 +1,5 @@
 ﻿<h3>#Asp.Net Core版</h3>
-1.安装命令：
+1.后台Nuget包安装命令：
 <pre>
 Install-Package UploadHandleCore -Version 1.0.1
 </pre>

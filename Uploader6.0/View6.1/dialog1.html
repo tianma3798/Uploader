@@ -50,6 +50,12 @@
             text: '剪切图片模式',
             more: false,//是否可以上传多个
             auto: true, //是否自动上传
+            onCheck: function (file) {
+                console.info(file);
+            },
+            onSendImg: function (dataUrl) {
+                $('#relativeName').attr('src', dataUrl);
+            },
             onSuccess: function (data) {
                 console.info(data);
                 $('#name').text(data.newName);

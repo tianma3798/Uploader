@@ -61,7 +61,8 @@
             isImg: true,//是否是图片，如果是图片提供预览功能
             fileExts: 'jpg;png;gif;bmp;jpeg',//允许上传的文件扩展名，*----没有显示
             timeout: 30000,
-            onStart: function () { },//开始上传
+            onCheck: function (file) { return true; },//开始上传验证扩展
+            onSendImg: function (dataUrl, handle) { handle();}, //图片发送服务器前验证,需要制定isImg=true
             onSuccess: function (data) { },//上传成功,如果是‘imgdouble’模式返回图片文件 {imgBig:'',imgSmall:''}
             onError: function (msg) {
                 uploadCfg.error(msg);
@@ -202,7 +203,7 @@
                         if (i > loaded) {
                             var file = fileList[i];
                             //文件类型验证
-                            if (checkExt(file.name, _opts)) {
+                            if (checkExt(file, _opts)) {
                                 //读取图片并处理
                                 _this.bindImgDouble(file, function () {
                                     i++;
@@ -214,11 +215,10 @@
                         }
                         loaded = i;
                     }, 100);
-
                 } else {
                     var file = fileList[0];
                     //文件类型验证
-                    if (checkExt(file.name, _opts) == false)
+                    if (checkExt(file, _opts) == false)
                         return false;
                     //读取图片并处理
                     _this.bindImgDouble(file);
@@ -377,12 +377,16 @@
         //发送图片文件统一处理
         sendData: function (dataUrl, onSuccess) {
             var _this = this;
-            var upload = new UploadData(_this, {
-                data: dataUrl
+            //发送服务器前验证
+            var flag = _this.opts.onSendImg(dataUrl, function () {
+                //上传 处理
+                var upload = new UploadData(_this, {
+                    data: dataUrl
+                });
+                upload.onSuccess = function (data) {
+                    if (onSuccess) onSuccess(data);
+                }
             });
-            upload.onSuccess = function (data) {
-                if (onSuccess) onSuccess(data);
-            }
         }
     }
 
@@ -391,6 +395,7 @@
     function MyReader(file, loader, enableRead) {
         var _this = this;
         this.uploader = loader;
+        this.opts = loader.opts;
         this.uploadType = loader.opts.uploadType;
         this.file = file;
         this.step = 1024 * 256;//每次读取文件的大小
@@ -403,12 +408,19 @@
         this.sending = false;//判断是否正在发送文件
         //文件验证
         if (this.check()) {
-            //初始化显示
-            this.init();
-            //如果是Ajax提交则读取间隔加大
-            if (this.uploadType == 1) this.step = 1024 * 1024;
-            if (_this.enableRead) {
-                _this.start();
+            //如果是图片，先验证 再提交
+            if (this.opts.isImg) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    _this.opts.onSendImg(reader.result, function () {
+                        //初始化处理
+                        _this.init();
+                    });
+                }
+                reader.readAsDataURL(file);
+            } else {
+                //初始化处理
+                _this.init();
             }
         }
     }
@@ -423,12 +435,17 @@
                 return false;
             }
             //文件类型
-            return checkExt(_this.file.name, _opts);
-            return true;
+            return checkExt(_this.file, _opts);
         },
         //初始化页面显示
         init: function () {
             var _this = this;
+            //如果是Ajax提交则读取间隔加大
+            if (this.uploadType == 1) this.step = 1024 * 1024;
+            if (_this.enableRead) {
+                _this.start();
+            }
+
             //创建当前显示的面板
             var panel = this.uploader.elem.next();
             var item = getDivByClass('uploader_item');
@@ -506,7 +523,6 @@
                 }
             }
             _this.readBlob();
-
             //执行发送操作
             function sendData(blob, backInfo, onSuccess) {
                 var ajax = new MyAjax(_this.uploader);
@@ -1482,9 +1498,8 @@
             //绑定读取事件
             var file = _elem.find('input[type=file]');
             file.change(function () {
-                var val = $(this).val();
                 //扩展名 验证
-                if (checkExt(val, _this.uploader.opts) == false)
+                if (checkExt(this.files[0], _this.uploader.opts) == false)
                     return false;
                 //读取选择文件
                 var currentFile = this.files[0];
@@ -1704,10 +1719,13 @@
             this.cover.destroy();
         }
     }
-
     //扩展名 验证,返回bool 值
-    function checkExt(val, opts) {
+    function checkExt(file, opts) {
         var _opts = opts;
+        //执行自定义验证
+        if (opts.onCheck(file) == false)
+            return false;
+        var val = file.name;
         if (isWechat())//如果是微信客户端不能通过文件名的后缀名验证
             return true;
         var enableList = _opts.fileExts.toLowerCase().split(';');

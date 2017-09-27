@@ -37,6 +37,15 @@
             background: '#f00', //制定空白处理颜色
             maxWidth: 500,
             maxHeight: 500,
+            onSendImg: function (dataUrl, handle) {
+                var img = new Image();
+                img.onload = function () {
+                    console.info(img.width);
+                    console.info(img.height);
+                    handle();
+                }
+                img.src = dataUrl;
+            },
             onSuccess: function (data) {
                 console.info(data);
                 //     $('#img1').attr('src', data.small.relativeName).hide().fadeIn('normal');

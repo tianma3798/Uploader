@@ -39,6 +39,16 @@
         var uploader = $('#uploadBtn').uploader({
             url: '../ashx/upload_ajax.ashx',
             fileExts: '*',
+            isImg: true,
+            onSendImg: function (dataUrl, handle) {
+                var img = new Image();
+                img.onload = function () {
+                    console.info(img.width);
+                    console.info(img.height);
+                    handle();
+                }
+                img.src = dataUrl;
+            },
             text: '简单上传按钮',
             onSuccess: function (data) {
                 console.info(data);
