@@ -33,6 +33,9 @@
                 setTimeout(function () {
                     $('#relativeName').attr('src', data.relativeName).hide().fadeIn('normal');
                 }, 1500);
+            },
+            onCheck: function (file) {
+                console.info(file);
             }
         });
     </script>

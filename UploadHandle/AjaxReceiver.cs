@@ -77,7 +77,7 @@ namespace UploadHandle
                 //创建文件
                 try
                 {
-                    UploadMsg upMsg = info.JsonDeserialezer<UploadMsg>();
+                    UploadMsg upMsg = info.JsonDese<UploadMsg>();
                     if (upMsg == null)
                         throw new HttpException(500, "服务器接收文件信息json数据失败");
                     if (string.IsNullOrEmpty(this.SubFolder) == false)
@@ -101,7 +101,7 @@ namespace UploadHandle
                 if (string.IsNullOrEmpty(backInfo))
                     throw new HttpException("获取文件信息失败");
 
-                UploadMsg upMsg = backInfo.JsonDeserialezer<UploadMsg>();
+                UploadMsg upMsg = backInfo.JsonDese<UploadMsg>();
                 this.file = new UploadInfo(upMsg);
                 //获取文件数据
                 Stream stream = _file.InputStream;
@@ -166,7 +166,7 @@ namespace UploadHandle
         private void SendError(Exception ex)
         {
             _Context.Response.ContentType = "application/json";
-            _Context.Response.Write(new ErrorInfo(file, ex).ToJsonString());
+            _Context.Response.Write(new ErrorInfo(file, ex).ToJson());
         }
         /// <summary>
         /// 接收成功 相应
@@ -175,7 +175,7 @@ namespace UploadHandle
         public void SendSuccess(string msg)
         {
             _Context.Response.ContentType = "application/json";
-            _Context.Response.Write(new SuccessInfo(this, msg).ToJsonString());
+            _Context.Response.Write(new SuccessInfo(this, msg).ToJson());
         }
     }
 }
