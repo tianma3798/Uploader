@@ -195,6 +195,9 @@
             var file = _elem.find('input[type=file]');
             file.change(function () {
                 var fileList = this.files;
+                if (fileList.length <= 0)
+                    return;
+
                 if (_opts.more) {
                     //控制上传队列，一个一个的上传
                     var loaded = -1;
@@ -1498,6 +1501,7 @@
             //绑定读取事件
             var file = _elem.find('input[type=file]');
             file.change(function () {
+                if (this.files.length <= 0) return;
                 //扩展名 验证
                 if (checkExt(this.files[0], _this.uploader.opts) == false)
                     return false;
