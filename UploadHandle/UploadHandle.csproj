@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormReceiver.cs" />
     <Compile Include="AjaxReceiver.cs" />
     <Compile Include="AutoHandle.cs" />
     <Compile Include="Info\ErrorInfo.cs" />

@@ -10,15 +10,16 @@ namespace Core_Test.Controllers
 {
     public class CommonController : Controller
     {
+        /*********Ajax 方式使用**********/
         public void Ajax()
         {
-AjaxReceiver _receive = new AjaxReceiver(this.HttpContext);
-//接收文件成功
-_receive.OnSuccess = (data) =>
-{
-    Write(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
-};
-_receive.DoWork();
+            AjaxReceiver _receive = new AjaxReceiver(this.HttpContext);
+            //接收文件成功
+            _receive.OnSuccess = (data) =>
+            {
+                Write(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
+            };
+            _receive.DoWork();
         }
         public void Ajax_Thumb()
         {
@@ -55,11 +56,30 @@ _receive.DoWork();
             }
         }
 
+        /*********Socket 方式使用**********/
         public void Socket()
         {
             try
             {
                 Receiver _receive = new Receiver(this.HttpContext);
+                //接收文件成功
+                _receive.OnSuccess = (data) =>
+                {
+                    Write(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /*********Form 方式使用**********/
+        public void Form()
+        {
+            try
+            {
+                FormReceiver _receive = new FormReceiver(this.HttpContext);
                 //接收文件成功
                 _receive.OnSuccess = (data) =>
                 {

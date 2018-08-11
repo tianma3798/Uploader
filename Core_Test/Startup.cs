@@ -41,6 +41,8 @@ namespace Core_Test
 
             app.UseStaticFiles();
 
+
+
             //配置上传
             UploadHandle.ServerInfo.SitePath = env.WebRootPath; //使用wwwroot作为根目录
 

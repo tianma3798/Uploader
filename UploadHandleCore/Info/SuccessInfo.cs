@@ -66,5 +66,12 @@ namespace UploadHandle
             this.curLength = rece.curLength;
             this.msg = msg;
         }
+
+        public SuccessInfo(FormReceiver rece, string msg) : this(rece.file)
+        {
+            this.curSize = rece.curSize;
+            this.curLength = rece.curLength;
+            this.msg = msg;
+        }
     }
 }

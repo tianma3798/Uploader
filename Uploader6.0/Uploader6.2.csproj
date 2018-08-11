@@ -75,6 +75,7 @@
     <Content Include="Ashx\upload.ashx" />
     <Content Include="Ashx\upload_ajax.ashx" />
     <Content Include="Ashx\thumbnail.ashx" />
+    <Content Include="Ashx\upload_form.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -128,6 +129,9 @@
     </Compile>
     <Compile Include="Ashx\upload_ajax.ashx.cs">
       <DependentUpon>upload_ajax.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Ashx\upload_form.ashx.cs">
+      <DependentUpon>upload_form.ashx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
