@@ -49,7 +49,6 @@ namespace Core_Test
             //绑定WebScoket处理
             // app.Map("/common/socket", UploadHandle.Receiver.Map);
 
-
             //绑定WebSocket处理，接收成功后，生成缩略图
             app.Map("/common/socket_thumb", (con) =>
             {
@@ -89,8 +88,6 @@ namespace Core_Test
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-
         }
     }
 }
