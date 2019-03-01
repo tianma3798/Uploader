@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>UploadHandle</RootNamespace>
-    <Version>1.1.0</Version>
-    <Description>上传.NetCore 版；v1.1.0 添加FormReceiver 小程序版接受文件处理</Description>
+    <Version>2.1.0</Version>
+    <Description>.NetCore版本升级为2.1</Description>
     <Authors>天马3798</Authors>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <AssemblyVersion>2.0.0.1</AssemblyVersion>
     <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="ZKWeb.System.Drawing" Version="3.0.0" />
   </ItemGroup>
 

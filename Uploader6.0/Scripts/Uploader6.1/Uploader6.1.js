@@ -27,7 +27,7 @@
         single: 'single',
         dialog: 'dialog',
         imgdouble: 'imgdouble',
-        fixedone:'fixedone'
+        fixedone: 'fixedone'
     }
     window.UPLOADTYPE = UPLOADTYPE;
 
@@ -55,14 +55,14 @@
             maxHeight: 1000,//前台压缩时，最大高度
             minWidth: 300,//前台压缩时，最小宽度
             minHeight: 300,//前台压缩时，最小高度
-            background:'white',// 在使用到背景处理时的，默认背景
+            background: 'white',// 在使用到背景处理时的，默认背景
             tempFile: uploadCfg.tempFile,//设置临时文件夹
             auto: true,//是否自动上传文件
             isImg: true,//是否是图片，如果是图片提供预览功能
             fileExts: 'jpg;png;gif;bmp;jpeg',//允许上传的文件扩展名，*----没有显示
             timeout: 30000,
             onCheck: function (file) { return true; },//开始上传验证扩展
-            onSendImg: function (dataUrl, handle) { handle();}, //图片发送服务器前验证,需要制定isImg=true
+            onSendImg: function (dataUrl, handle) { handle(); }, //图片发送服务器前验证,需要制定isImg=true
             onSuccess: function (data) { },//上传成功,如果是‘imgdouble’模式返回图片文件 {imgBig:'',imgSmall:''}
             onError: function (msg) {
                 uploadCfg.error(msg);
@@ -502,9 +502,9 @@
                 _this.startScoket();
             }
         },
-         /**
-        * 使用Ajax方式 处理数据传输
-        */
+        /**
+       * 使用Ajax方式 处理数据传输
+       */
         startAjax: function () {
             var _this = this;
             //开始读取
@@ -1142,7 +1142,8 @@
 
             //绑定 移动
             var isBackMove = false;
-            var oldX = oldY = 0;
+            var oldX = 0;
+            var oldY = 0;
             canvasBack.mousedown(function (e) {
                 isBackMove = true;
                 oldX = e.clientX;
@@ -1199,7 +1200,7 @@
                 var minValue = 20;
                 var pageX = e.pageX;
                 var pageY = e.pageY;
-                var rWidth = rHeight = rLeft = rTop = 0;
+                var rWidth = 0, rHeight = 0, rLeft = 0, rTop = 0;
                 if (isScale == 1) {
                     //右下角
                     var spanLeft = pageX - oldX;
