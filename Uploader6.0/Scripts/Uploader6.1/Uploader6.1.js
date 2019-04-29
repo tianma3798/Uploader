@@ -63,7 +63,8 @@
             timeout: 30000,
             onCheck: function (file) { return true; },//开始上传验证扩展
             onSendImg: function (dataUrl, handle) { handle(); }, //图片发送服务器前验证,需要制定isImg=true
-            onSuccess: function (data) { },//上传成功,如果是‘imgdouble’模式返回图片文件 {imgBig:'',imgSmall:''}
+            onSuccess: function () { },//上传成功,如果是‘imgdouble’模式返回图片文件 {imgBig:'',imgSmall:''}
+            onAllSuccess: function (data) { },//当全部上传成功时触发
             onError: function (msg) {
                 uploadCfg.error(msg);
             },//上传异常处理
@@ -163,6 +164,7 @@
                         i++;
                         if (i >= fileList.length) {
                             clearInterval(thisInter);
+                            if (_opts.onAllSuccess) _opts.onAllSuccess();
                         }
                     }
                 } else {
@@ -215,9 +217,10 @@
                         }
                         if (i == fileList.length - 1) {
                             clearInterval(thisInter);
+                            if (_opts.onAllSuccess)_opts.onAllSuccess();
                         }
                         loaded = i;
-                    }, 100);
+                    }, 200);
                 } else {
                     var file = fileList[0];
                     //文件类型验证
@@ -239,6 +242,7 @@
                 var result = reader.result;
                 new ImageFilter(_this, result, function (data) {
                     if (_opts.onSuccess) _opts.onSuccess(data);
+                    if (onSuccess) onSuccess(data);
                 });
             }
             reader.readAsDataURL(file);
