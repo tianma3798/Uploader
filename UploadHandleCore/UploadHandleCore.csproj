@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>UploadHandle</RootNamespace>
-    <Version>2.1.0</Version>
-    <Description>.NetCore版本升级为2.1</Description>
+    <Version>2.1.1</Version>
+    <Description>.NetCore版本升级为2.1.1，修改json序列化名称</Description>
     <Authors>天马3798</Authors>
-    <AssemblyVersion>2.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
+    <AssemblyVersion>2.0.0.2</AssemblyVersion>
+    <FileVersion>1.0.0.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

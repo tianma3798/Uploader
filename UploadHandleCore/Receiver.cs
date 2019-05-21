@@ -97,7 +97,7 @@ namespace UploadHandle
                         try
                         {
                             string msg = Encoding.UTF8.GetString(buffer.Array, 0, curLength);
-                            UploadMsg upMsg = msg.JsonDeserializer<UploadMsg>();
+                            UploadMsg upMsg = msg.JsonDeserialize<UploadMsg>();
                             if (upMsg == null)
                                 throw new Exception( "服务器接收客户json数据失败");
                             if (string.IsNullOrEmpty(this.SubFolder) == false)
@@ -173,7 +173,7 @@ namespace UploadHandle
             result.curSize = curSize;
             result.curLength = curLength;
             result.msg = msg;
-            ArraySegment<byte> data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(result.ToJsonString()));
+            ArraySegment<byte> data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(result.ToJson()));
             await _socket.SendAsync(data, WebSocketMessageType.Text, true, CancellationToken.None);
         }
         /// <summary>
@@ -187,7 +187,7 @@ namespace UploadHandle
             if (OnError != null)
                 OnError(ex);
             ErrorInfo result = new ErrorInfo(_file, ex);
-            ArraySegment<byte> data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(result.ToJsonString()));
+            ArraySegment<byte> data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(result.ToJson()));
             await _socket.SendAsync(data, WebSocketMessageType.Text, true, CancellationToken.None);
         }
 

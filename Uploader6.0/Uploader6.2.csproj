@@ -103,6 +103,7 @@
     <Content Include="Scripts\Uploader\Uploader6.0.js" />
     <Content Include="View6.1\dialog1.html" />
     <Content Include="View6.1\fixedone1.html" />
+    <Content Include="View6.1\imgdouble2.html" />
     <Content Include="View6.1\imgdouble1.html" />
     <Content Include="View6.1\single_thumb.html" />
     <Content Include="View6.1\single1.html" />

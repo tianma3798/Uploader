@@ -21,7 +21,7 @@ namespace System
         /// Json序列化
         /// </summary>
         /// <returns></returns>
-        public static string ToJsonString(this object obj)
+        public static string ToJson(this object obj)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
@@ -39,7 +39,7 @@ namespace System
         /// Json序列化
         /// </summary>
         /// <returns></returns>
-        public static string ToJsonString(this object obj, string dateFormate)
+        public static string ToJson(this object obj, string dateFormate)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
@@ -53,7 +53,6 @@ namespace System
                 return sw.ToString();
             }
         }
-
         /// <summary>
         /// Json序列化，长时间处理‘yyyy-MM-dd HH:mm’
         /// </summary>
@@ -61,7 +60,7 @@ namespace System
         /// <returns></returns>
         public static string ToJsonLongDate(this object obj)
         {
-            return ToJsonString(obj, "yyyy-MM-dd HH:mm");
+            return ToJson(obj, "yyyy-MM-dd HH:mm");
         }
         /// <summary>
         /// 执行序列化处理
@@ -84,11 +83,13 @@ namespace System
                 return sw.ToString();
             }
         }
+
+
         /// <summary>
         /// Json反序列化
         /// </summary>
         /// <returns></returns>
-        public static T JsonDeserializer<T>(this string str)
+        public static T JsonDeserialize<T>(this string str)
         {
             return JsonConvert.DeserializeObject<T>(str);
         }
