@@ -98,9 +98,13 @@
     <Content Include="Scripts\Uploader6.1\cursor_drag.ico" />
     <Content Include="Scripts\Uploader6.1\Uploader6.1.css" />
     <Content Include="Scripts\Uploader6.1\Uploader6.1.js" />
+    <Content Include="Scripts\Uploader6.2\cursor_drag.ico" />
+    <Content Include="Scripts\Uploader6.2\Uploader6.2.css" />
+    <Content Include="Scripts\Uploader6.2\Uploader6.2.js" />
     <Content Include="Scripts\Uploader\cursor_drag.ico" />
     <Content Include="Scripts\Uploader\Uploader6.0.css" />
     <Content Include="Scripts\Uploader\Uploader6.0.js" />
+    <Content Include="View6.1\dialog2.html" />
     <Content Include="View6.1\dialog1.html" />
     <Content Include="View6.1\fixedone1.html" />
     <Content Include="View6.1\imgdouble2.html" />

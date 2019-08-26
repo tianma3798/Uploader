@@ -73,9 +73,7 @@
                 return getShowSize(this.maxSize);
             },
             /**图片剪切参数配置**/
-            coverParams: {
-                showRight:false
-            }
+            coverParams: { }
         }
         this.elem = elem;
         this.opts = $.extend({}, defaults, opts);
@@ -1013,6 +1011,7 @@
         var _this = this;
         _this.uploader = loader;
         var defaults = {
+            showRight: false,//指定是否显示右侧面板
             title: '上传图片',//对话框标题
             itemWidth: 450,
             itemHeight: 450,
@@ -1068,6 +1067,7 @@
             _elem.append(middle);
             _this.initLeftItem();
             _this.initRightItem();
+
             if (_opts.showRight == false) {
                 _elem.find('.rightItem').hide();
             }
