@@ -28,6 +28,7 @@
             text: '上传图片',
             more: false,//是否可以上传多个
             auto: true, //是否自动上传
+            maxSize:1024*1024*50,
             onSuccess: function (data) {
                 $('#name').text(data.newName);
                 setTimeout(function () {
