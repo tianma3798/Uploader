@@ -146,6 +146,7 @@ namespace UploadHandle
                 finally
                 {
                     fs.Close();
+                    fs.Dispose();
                 }
                 FileInfo info = new FileInfo(filename);
                 if (info.Length >= _file.ContentLength)//保存文件成功

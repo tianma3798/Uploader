@@ -97,6 +97,7 @@ namespace UploadHandle
 
                     fs.Write(list, 0, list.Length);
                     fs.Close();
+                    fs.Dispose();
                 }
 
                 //接收文件信息成功 
