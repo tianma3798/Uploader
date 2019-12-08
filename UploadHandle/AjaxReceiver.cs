@@ -139,6 +139,7 @@ namespace UploadHandle
                 finally
                 {
                     fs.Close();
+                    fs.Dispose();
                 }
                 //判断接收成功
                 FileInfo info = new FileInfo(filename);
