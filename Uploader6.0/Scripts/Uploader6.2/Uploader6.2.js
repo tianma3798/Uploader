@@ -1069,6 +1069,7 @@
 
             if (_opts.showRight == false) {
                 _elem.find('.rightItem').hide();
+                _elem.find('.leftItem').css({'float':'none'});
             }
             middle.append(getDivByClass('clear'));
             //底部按钮
@@ -1129,15 +1130,15 @@
             //绑定 滚轮放大或缩小
             addMouseWheel(canvasBack[0], function (e) {
                 var temp = e.delta > 0 ? 0.1 : -0.1;
-                //临界值判断,如果缩小带初始大小的一半禁止缩小，放大、如果放大到源图片的1.5倍禁用放大
+                //临界值判断,如果缩小带初始大小的十分之一禁止缩小，放大、如果放大到源图片的10倍禁用放大
                 var width = _this.initWidth * _this.scale;
                 var height = _this.initHeight * _this.scale;
                 if (temp < 0) {
-                    if (width * height <= (_this.initWidth * _this.initHeight / 2)) {
+                    if (width * height <= (_this.initWidth * _this.initHeight / 10)) {
                         return;
                     }
                 } else {
-                    if (width * height >= (_this.img.width * _this.img.height * 1.5)) {
+                    if (width * height >= (_this.img.width * _this.img.height * 10)) {
                         return;
                     }
                 }
