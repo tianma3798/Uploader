@@ -83,8 +83,9 @@ namespace Core_Test.Controllers
                 //接收文件成功
                 _receive.OnSuccess = (data) =>
                 {
-                    Write(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
+                    //Write(string.Format("新文件名{0},旧文件名{1}", data.NewName, data.OldName));
                 };
+                _receive.DoWork();
             }
             catch (Exception ex)
             {

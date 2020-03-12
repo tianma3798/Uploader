@@ -39,7 +39,7 @@ namespace UploadHandle
         /// <summary>
         /// 接收文件成功后，触发
         /// </summary>
-        public Action<UploadInfo> OnSuccess = null;
+        public Action<SuccessInfo> OnSuccess = null;
         /// <summary>
         /// 接收文件失败，触发
         /// </summary>
@@ -50,8 +50,6 @@ namespace UploadHandle
         public FormReceiver(HttpContext context)
         {
             _Context = context;
-            //接收文件
-            this.DoWork();
         }
         /// <summary>
         /// 指定子文件夹，接收处理
@@ -61,11 +59,10 @@ namespace UploadHandle
         {
             this.SubFolder = subfolder;
         }
-
         /// <summary>
         /// 接收文件，逻辑处理
         /// </summary>
-        private void DoWork()
+        public void DoWork()
         {
             HttpRequest req = _Context.Request;
             //创建文件
@@ -73,21 +70,20 @@ namespace UploadHandle
             {
                 //接收文件
                 if (req.Form.Files.Count <= 0)
-                    throw new Exception( "获取上传文件失败");
+                    throw new Exception("获取上传文件失败");
                 IFormFile _file = req.Form.Files[0];
                 string backInfo = req.Form["backinfo"];
                 if (string.IsNullOrEmpty(backInfo))
                     throw new Exception("获取文件信息失败");
                 UploadMsg upMsg = backInfo.JsonDeserialize<UploadMsg>();
                 if (upMsg == null)
-                    throw new Exception( "服务器接收文件信息json数据失败");
+                    throw new Exception("服务器接收文件信息json数据失败");
                 if (string.IsNullOrEmpty(this.SubFolder) == false)
                     upMsg.SubFolder = this.SubFolder;
                 if (string.IsNullOrEmpty(upMsg.OldName))
                     upMsg.OldName = _file.FileName;
 
                 this.file = new UploadInfo(upMsg);
-                // _file.SaveAs(this.file.GetFullName());//保存图片处理
                 using (FileStream fs = new FileStream(this.file.GetFullName(), FileMode.OpenOrCreate, FileAccess.Write))
                 {
                     Stream reader = _file.OpenReadStream();
@@ -108,8 +104,6 @@ namespace UploadHandle
                 SendError(ex);
             }
         }
-
-
         /// <summary>
         /// 相应出错 信息
         /// </summary>
@@ -128,9 +122,12 @@ namespace UploadHandle
         public void SendSuccess(string msg)
         {
             _Context.Response.ContentType = "application/json";
-            string result = new SuccessInfo(this, msg).ToJson();
-            byte[] data = UTF8Encoding.Default.GetBytes(result);
+            SuccessInfo result = new SuccessInfo(this, msg);
+            if (OnSuccess != null)
+                OnSuccess(result);
+            byte[] data = UTF8Encoding.Default.GetBytes(result.ToJson());
             _Context.Response.Body.Write(data, 0, data.Length);
         }
+
     }
 }

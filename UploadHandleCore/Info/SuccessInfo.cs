@@ -47,6 +47,11 @@ namespace UploadHandle
         /// 后台处理类型
         /// </summary>
         public int handleType { get; set; }
+
+        /// <summary>
+        /// 上传文件信息
+        /// </summary>
+        private UploadInfo _file = null;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -58,9 +63,10 @@ namespace UploadHandle
             this.size = file.ContentLength;
             this.Data = file.Data;
             this.handleType = file._UploadMsg.HandleType;
+            this._file = file;
         }
 
-        public SuccessInfo(AjaxReceiver rece,string msg) : this(rece.file)
+        public SuccessInfo(AjaxReceiver rece, string msg) : this(rece.file)
         {
             this.curSize = rece.curSize;
             this.curLength = rece.curLength;
@@ -73,5 +79,18 @@ namespace UploadHandle
             this.curLength = rece.curLength;
             this.msg = msg;
         }
+
+
+
+        /// <summary>
+        /// 获取服务器绝对文件路径
+        /// </summary>
+        /// <returns></returns>
+        public string GetFullName()
+        {
+            return this._file.GetFullName();
+        }
+
+
     }
 }

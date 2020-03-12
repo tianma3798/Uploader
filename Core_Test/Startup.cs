@@ -47,7 +47,7 @@ namespace Core_Test
             UploadHandle.ServerInfo.SitePath = env.WebRootPath; //使用wwwroot作为根目录
 
             //绑定WebScoket处理
-            // app.Map("/common/socket", UploadHandle.Receiver.Map);
+            app.Map("/common/socket", UploadHandle.Receiver.Map);
 
             //绑定WebSocket处理，接收成功后，生成缩略图
             app.Map("/common/socket_thumb", (con) =>
