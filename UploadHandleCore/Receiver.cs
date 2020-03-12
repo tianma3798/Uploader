@@ -130,7 +130,6 @@ namespace UploadHandle
                 else { break; }
             }
         }
-        private static object fileLock = new object();
         /// <summary>
         /// 追加二进制数据到文件
         /// </summary>
@@ -141,25 +140,22 @@ namespace UploadHandle
             string filename = _file.GetFullName();
             try
             {
-                lock (fileLock)
+                FileStream fs = new FileStream(filename, FileMode.Append, FileAccess.Write,FileShare.ReadWrite);
+                try
                 {
-                    FileStream fs = new FileStream(filename, FileMode.Append, FileAccess.Write);
-                    try
-                    {
-                        byte[] data = buffer.ToArray();
-                        fs.Write(data, 0, curLength);
-                    }
-                    finally
-                    {
-                        fs.Close();
-                        fs.Dispose();
-                    }
-                    FileInfo info = new FileInfo(filename);
-                    if (info.Length >= _file.ContentLength)//保存文件成功
-                    {
-                        if (OnSuccess != null)
-                            OnSuccess(_file);
-                    }
+                    byte[] data = buffer.ToArray();
+                    fs.Write(data, 0, curLength);
+                }
+                finally
+                {
+                    fs.Close();
+                    fs.Dispose();
+                }
+                FileInfo info = new FileInfo(filename);
+                if (info.Length >= _file.ContentLength)//保存文件成功
+                {
+                    if (OnSuccess != null)
+                        OnSuccess(_file);
                 }
             }
             catch (Exception ex)
