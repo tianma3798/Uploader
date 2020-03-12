@@ -68,7 +68,7 @@
                 uploadCfg.error(msg);
             },//上传异常处理
             onClick: function () { },//按钮 点击事件
-            maxSize: 1024 * 1024 * 1024,//文件最大大小，单位字节
+            maxSize: 1024 * 1024 * 10,//文件最大大小，单位字节
             getMaxSize: function () {// 用于计算显示最大值
                 return getShowSize(this.maxSize);
             },
@@ -1130,15 +1130,15 @@
             //绑定 滚轮放大或缩小
             addMouseWheel(canvasBack[0], function (e) {
                 var temp = e.delta > 0 ? 0.1 : -0.1;
-                //临界值判断,如果缩小带初始大小的十分之一禁止缩小，放大、如果放大到源图片的10倍禁用放大
+                //临界值判断,如果缩小带初始大小的十分之一禁止缩小，放大、如果放大到源图片的100倍禁用放大
                 var width = _this.initWidth * _this.scale;
                 var height = _this.initHeight * _this.scale;
                 if (temp < 0) {
-                    if (width * height <= (_this.initWidth * _this.initHeight / 10)) {
+                    if (width * height <= (_this.initWidth * _this.initHeight / 20)) {
                         return;
                     }
                 } else {
-                    if (width * height >= (_this.img.width * _this.img.height * 10)) {
+                    if (width * height >= (_this.img.width * _this.img.height * 20)) {
                         return;
                     }
                 }
