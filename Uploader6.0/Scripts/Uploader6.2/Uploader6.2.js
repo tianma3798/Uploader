@@ -73,7 +73,7 @@
                 return getShowSize(this.maxSize);
             },
             /**图片剪切参数配置**/
-            coverParams: { }
+            coverParams: {}
         }
         this.elem = elem;
         this.opts = $.extend({}, defaults, opts);
@@ -155,10 +155,12 @@
                     }, 1000);
                     function startFile() {
                         var reader = readers[i];
-                        //创建读取对象
-                        reader.start();
-                        reader.onSendSuccess = function () {
-                            j++;
+                        if (reader) {
+                            //创建读取对象
+                            reader.start();
+                            reader.onSendSuccess = function () {
+                                j++;
+                            }
                         }
                         i++;
                         if (i >= fileList.length) {
@@ -215,7 +217,7 @@
                         }
                         if (i == fileList.length - 1) {
                             clearInterval(thisInter);
-                            if (_opts.onAllSuccess)_opts.onAllSuccess();
+                            if (_opts.onAllSuccess) _opts.onAllSuccess();
                         }
                         loaded = i;
                     }, 200);
@@ -1069,7 +1071,7 @@
 
             if (_opts.showRight == false) {
                 _elem.find('.rightItem').hide();
-                _elem.find('.leftItem').css({'float':'none'});
+                _elem.find('.leftItem').css({ 'float': 'none' });
             }
             middle.append(getDivByClass('clear'));
             //底部按钮

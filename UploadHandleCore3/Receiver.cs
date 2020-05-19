@@ -99,7 +99,7 @@ namespace UploadHandle
                             string msg = Encoding.UTF8.GetString(buffer.Array, 0, curLength);
                             UploadMsg upMsg = msg.JsonDeserialize<UploadMsg>();
                             if (upMsg == null)
-                                throw new Exception( "服务器接收客户json数据失败");
+                                throw new Exception("服务器接收客户json数据失败");
                             if (string.IsNullOrEmpty(this.SubFolder) == false)
                                 upMsg.SubFolder = this.SubFolder + "/" + upMsg.SubFolder;
                             _file = new UploadInfo(upMsg);
@@ -140,7 +140,7 @@ namespace UploadHandle
             string filename = _file.GetFullName();
             try
             {
-                FileStream fs = new FileStream(filename, FileMode.Append, FileAccess.Write,FileShare.ReadWrite);
+                FileStream fs = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
                 try
                 {
                     byte[] data = buffer.ToArray();
@@ -191,8 +191,6 @@ namespace UploadHandle
             ArraySegment<byte> data = new ArraySegment<byte>(Encoding.UTF8.GetBytes(result.ToJson()));
             await _socket.SendAsync(data, WebSocketMessageType.Text, true, CancellationToken.None);
         }
-
-
 
         /// <summary>
         /// 路由绑定

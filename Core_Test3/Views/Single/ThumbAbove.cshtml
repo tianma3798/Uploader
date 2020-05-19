@@ -19,28 +19,25 @@
 <div class="uploader uploader-default" id="uploadBtn"></div>
 <br />
 <br /><br />
-<script>
+      <script>
     /*******使用WebScoket 方式处理传输*******/
-    @*var uploader = $('#uploadBtn').uploader({
+    var uploader = $('#uploadBtn').uploader({
         url: 'ws://@(Context.Request.Host)/common/Socket',
         fileExts:'*',
-        text: '简单上传按钮',
-        onSuccess: function (data) {
-            console.info(data);
-            $('#name').text(data.newName);
-            $('#relativeName').text(data.relativeName);
-        }
-    });*@
+        text: '前端大小图处理',
+            type: 'imgdouble',
+    minWidth: 100,
+    minHeight: 100,
+    maxWidth: 800,
+    maxHeight: 600,
+    handleType: '0',//对于大小图模式最好不要自动处理
 
-    ///*******使用Ajax 方式处理传输*******/
-    var uploader = $('#uploadBtn').uploader({
-        url: '../common/ajax',
-        fileExts: '*',
-        text: '简单上传按钮',
         onSuccess: function (data) {
             console.info(data);
             $('#name').text(data.newName);
             $('#relativeName').text(data.relativeName);
         }
     });
-</script>
+
+
+      </script>

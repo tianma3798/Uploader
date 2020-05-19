@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>3.1.2</Version>
+    <Version>3.1.6</Version>
     <PackageId>UploadHandleCore</PackageId>
     <Authors>tianma102</Authors>
     <Company>tianma102</Company>
     <Product>UploadHandleCore</Product>
-    <Description>修改form提交细节</Description>
+    <Description>修改请求上下文的异步读取方式</Description>
   </PropertyGroup>
 
   <ItemGroup>

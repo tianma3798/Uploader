@@ -13,10 +13,16 @@ namespace Core_Test.Controllers
             return View();
         }
 
-
+        public IActionResult ThumbAbove()
+        {
+            return View();
+        }
         public IActionResult Thumb()
         {
             return View();
         }
+
+
+
     }
 }

@@ -178,7 +178,7 @@ namespace UploadHandle
             _Context.Response.ContentType = "application/json";
             string result = new ErrorInfo(file, ex).ToJson();
             byte[] data = UTF8Encoding.Default.GetBytes(result);
-            _Context.Response.Body.Write(data,0,data.Length);
+            _Context.Response.Body.WriteAsync(data, 0, data.Length);
         }
         /// <summary>
         /// 接收成功 相应
@@ -189,7 +189,7 @@ namespace UploadHandle
             _Context.Response.ContentType = "application/json";
             string result = new SuccessInfo(this, msg).ToJson();
             byte[] data = UTF8Encoding.Default.GetBytes(result);
-            _Context.Response.Body.Write(data, 0, data.Length);
+            _Context.Response.Body.WriteAsync(data, 0, data.Length);
         }
     }
 }

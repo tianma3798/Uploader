@@ -62,7 +62,7 @@ namespace UploadHandle
         /// <summary>
         /// 接收文件，逻辑处理
         /// </summary>
-        public void DoWork()
+        public async Task DoWork()
         {
             HttpRequest req = _Context.Request;
             //创建文件
@@ -88,20 +88,19 @@ namespace UploadHandle
                 {
                     Stream reader = _file.OpenReadStream();
                     byte[] list = new byte[reader.Length];
-                    reader.Read(list, 0, list.Length);
+                    await reader.ReadAsync(list, 0, list.Length);
                     reader.Close();
 
-                    fs.Write(list, 0, list.Length);
+                    await fs.WriteAsync(list, 0, list.Length);
                     fs.Close();
                     fs.Dispose();
                 }
-
                 //接收文件信息成功 
-                SendSuccess("接收文件信息,并创建问价成功");
+                 SendSuccess("接收文件信息,并创建问价成功");
             }
             catch (Exception ex)
             {
-                SendError(ex);
+                 SendError(ex);
             }
         }
         /// <summary>
@@ -113,7 +112,7 @@ namespace UploadHandle
             _Context.Response.ContentType = "application/json";
             string result = new ErrorInfo(file, ex).ToJson();
             byte[] data = UTF8Encoding.Default.GetBytes(result);
-            _Context.Response.Body.Write(data, 0, data.Length);
+            _Context.Response.Body.WriteAsync(data, 0, data.Length);
         }
         /// <summary>
         /// 接收成功 相应
@@ -126,7 +125,7 @@ namespace UploadHandle
             if (OnSuccess != null)
                 OnSuccess(result);
             byte[] data = UTF8Encoding.Default.GetBytes(result.ToJson());
-            _Context.Response.Body.Write(data, 0, data.Length);
+            _Context.Response.Body.WriteAsync(data, 0, data.Length);
         }
 
     }
