@@ -98,6 +98,9 @@
     <Content Include="Scripts\Uploader6.1\cursor_drag.ico" />
     <Content Include="Scripts\Uploader6.1\Uploader6.1.css" />
     <Content Include="Scripts\Uploader6.1\Uploader6.1.js" />
+    <Content Include="Scripts\Uploader6.3\cursor_drag.ico" />
+    <Content Include="Scripts\Uploader6.3\Uploader6.3.css" />
+    <Content Include="Scripts\Uploader6.3\Uploader6.3.js" />
     <Content Include="Scripts\Uploader6.2\cursor_drag.ico" />
     <Content Include="Scripts\Uploader6.2\Uploader6.2.css" />
     <Content Include="Scripts\Uploader6.2\Uploader6.2.js" />
@@ -113,6 +116,8 @@
     <Content Include="View6.1\single1.html" />
     <Content Include="View6.1\single2.html" />
     <Content Include="View6.2\dialog2.html" />
+    <Content Include="View6.3\cut2.html" />
+    <Content Include="View6.3\cut1.html" />
     <Content Include="View\dialog3.html" />
     <Content Include="View\dialog2.html" />
     <Content Include="View\dialog1.html" />

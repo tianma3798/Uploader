@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="../Scripts/jquery-1.11.3.min.js"></script>
+    <script src="../Scripts/Uploader6.3/Uploader6.3.js"></script>
+    <link href="../Scripts/Uploader6.3/Uploader6.3.css" rel="stylesheet" />
+</head>
+<body>
+    <br /><br /><br />
+    <div class="uploader uploader-default" id="uploadBtn"></div>
+    <br />
+    <br /><br />
+    <div>
+        上传文件名：
+        <span id="name"></span>
+        <br />
+        <img id="relativeName" style="border:1px solid red;" />
+    </div>
+
+    <script>
+        /**简单上传图片，后台自动处理，上传成功后显示图片**/
+        var uploader = $('#uploadBtn').uploader({
+            url: 'ws://localhost:63588/ashx/upload.ashx',
+            fileExts: 'jpg;png',
+            text: '上传图片',
+            type: 'fixedcut',
+            maxWidth: 300,
+            maxHeight: 300,
+            more: false,//是否可以上传多个
+            auto: true, //是否自动上传
+            maxSize: 1024 * 1024 * 50,
+            onSuccess: function (data) {
+                $('#uploadBtn input').val('');
+                $('#name').text(data.newName);
+                setTimeout(function () {
+                    $('#relativeName').attr('src', data.relativeName).hide().fadeIn('normal');
+                }, 1500);
+            },
+            onCheck: function (file) {
+                console.info(file);
+            }
+        });
+    </script>
+</body>
+</html>
