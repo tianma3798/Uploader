@@ -294,7 +294,8 @@
             //图片最大化缩放
             var iWidth = img.width;
             var iHeight = img.height;
-            if (iWidth > iHeight) {
+            //放大或者缩小
+            if (iWidth / iHeight > _opts.maxWidth / _opts.maxHeight) {
                 iWidth = iWidth * (_opts.maxHeight / iHeight);
                 iHeight = _opts.maxHeight;
             }
