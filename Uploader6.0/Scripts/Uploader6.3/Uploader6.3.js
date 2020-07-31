@@ -7,6 +7,7 @@
 * 5.使用_this.sending解决IE浏览器单个文件发送成两个的问题
 * 6.新增Ajax上传处理方式
 * 7.增加 图片剪切（fixedcut）
+* 8.增加 大小图剪切 (cutdouble)
 */
 /**
 * 功能及参数描述
@@ -28,7 +29,8 @@
         dialog: 'dialog',
         imgdouble: 'imgdouble',
         fixedone: 'fixedone',
-        fixedcut:'fixedcut'
+        fixedcut: 'fixedcut',
+        cutdouble:'cutdouble'
     }
     window.UPLOADTYPE = UPLOADTYPE;
 
@@ -42,9 +44,10 @@
             /*
             * 1.简单形式(single,单纯上传文件，自动提交)
             * 2.对话框形式(dialog，需要图片剪切处理)
-            * 3.前台压缩，大小图片上传 (imgdouble) ：不改变原图片的比例，在指定范围内等比例缩放，不修改图片内容 
+            * 3.前台压缩，大小图片上传 (imgdouble) ：不改变原图片的比例，在指定范围内等比例缩放，小图(minWidth*minHeight); 大图((maxWidth*maxHeight))
             * 4.前台最大比例，图片处理（fixedsize）：固定比例缩放，最大化图片显示，剩余空间填充空白
-            * 5.前台最大比例，图片剪切（fixedcut）:固定比例缩放，最大化图片剪切
+            * 5.前台最大比例，图片剪切（fixedcut）:固定比例缩放(maxWidth*maxHeight)，最大化图片剪切
+            * 6.前台裁剪，大小图处理（cutdouble）:固定最小图(minWidth*minHeight)，最大图(maxWidth*maxHeight)，裁剪图片
             */
             handleType: '0',//后台处理模式 0-自动模式，上传到网站upload文件夹中    1--简单模式，上传到WebConfig指定文件夹中   2---临时处理模式上传到临时文件夹
             uploadType: 1,//上传处理方式 1-----Ajax上传处理（默认）  2----WebSocket上传处理（主要用于应对单文件上传）
@@ -280,8 +283,11 @@
             } else if (_opts.type == UPLOADTYPE.fixedone) {
                 _this.fixedHandle();
             }
-            else if(_opts.type == UPLOADTYPE.fixedcut){
+            else if (_opts.type == UPLOADTYPE.fixedcut) {
                 _this.fixedCut();
+            }
+            else if (_opts.type == UPLOADTYPE.cutdouble) {
+                _this.cutdoubleHandle();
             }
         },
         //图片固定大小-剪切处理
@@ -401,6 +407,89 @@
                 }
                 //提交图片
                 dataUrl = _this.getDataURL(iWidth, iHeight);
+                if (_opts.handleType != 0) {
+                    _opts.subfolder2 = '/small';
+                }
+                //发送小图片
+                _this.sendData(dataUrl, function (data) {
+                    //小图上传成功
+                    doubleResult.small = data;
+                    //触发上传成功事件
+                    if (_this.onSuccess) _this.onSuccess(doubleResult);
+                });
+            });
+        },
+        //大图、小图 裁剪
+        cutdoubleHandle: function () {
+            var _this = this;
+            var img = this.img;
+            var canvas = this.canvas;
+            var ctx = this.ctx;
+            var _opts = this.opts;
+            //大图剪切
+            var oldWidth = img.width;
+            var oldHeight = img.height;
+            var iWidth = img.width;
+            var iHeight = img.height;
+            //放大或者缩小
+            if (iWidth / iHeight > _opts.maxWidth / _opts.maxHeight) {
+                iWidth = iWidth * (_opts.maxHeight / iHeight);
+                iHeight = _opts.maxHeight;
+            }
+            else {
+                iHeight = iHeight * (_opts.maxWidth / iWidth);
+                iWidth = _opts.maxWidth;
+            }
+            img.width = iWidth;
+            img.height = iHeight;
+            canvas.width = iWidth;
+            canvas.height = iHeight;
+            ctx.drawImage(img, 0, 0, iWidth, iHeight);
+            //剪切处理
+            var left = (iWidth - _opts.maxWidth) / 2;
+            var top = (iHeight - _opts.maxHeight) / 2;
+            var imgData = ctx.getImageData(left, top, _opts.maxWidth, _opts.maxHeight);
+            canvas.width = _opts.maxWidth;
+            canvas.height = _opts.maxHeight;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.putImageData(imgData, 0, 0);
+            var dataUrl = canvas.toDataURL('image/jpeg');
+            //*****上传大图片
+            _opts.targetExt = '.jpg';
+            if (_opts.handleType != 0) {
+                _opts.subfolder2 = '/big';
+            }
+            //大小图 分开上传
+            _this.sendData(dataUrl, function (data) {
+                var doubleResult = {};
+                doubleResult.big = data;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                //放大或者缩小
+                var iWidth = oldWidth;
+                var iHeight = oldHeight;
+                if (iWidth / iHeight > _opts.minWidth / _opts.minHeight) {
+                    iWidth = iWidth * (_opts.minHeight / iHeight);
+                    iHeight = _opts.minHeight;
+                }
+                else {
+                    iHeight = iHeight * (_opts.minWidth / iWidth);
+                    iWidth = _opts.minWidth;
+                }
+                img.width = iWidth;
+                img.height = iHeight;
+                canvas.width = iWidth;
+                canvas.height = iHeight;
+                ctx.drawImage(img, 0, 0, iWidth, iHeight);
+                //剪切处理
+                var left = (iWidth - _opts.minWidth) / 2;
+                var top = (iHeight - _opts.minHeight) / 2;
+                var imgData = ctx.getImageData(left, top, _opts.minWidth, _opts.minHeight);
+                canvas.width = _opts.minWidth;
+                canvas.height = _opts.minHeight;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.putImageData(imgData, 0, 0);
+                dataUrl = canvas.toDataURL('image/jpeg');
+                //提交图片
                 if (_opts.handleType != 0) {
                     _opts.subfolder2 = '/small';
                 }

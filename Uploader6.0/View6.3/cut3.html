@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="../Scripts/jquery-1.11.3.min.js"></script>
+    <script src="../Scripts/Uploader6.3/Uploader6.3.js"></script>
+    <link href="../Scripts/Uploader6.3/Uploader6.3.css" rel="stylesheet" />
+</head>
+<body>
+    <br /><br /><br />
+    <div class="uploader uploader-default" id="uploadBtn"></div>
+    <br />
+    <br /><br />
+    <div>
+        上传文件名：
+        <span id="name"></span>
+        <br />
+        <!--<img id="relativeName" style="border:1px solid red;" />-->
+        <div id="relativeName"></div>
+    </div>
+
+    <script>
+        /**简单上传图片，后台自动处理，上传成功后显示图片**/
+        var uploader = $('#uploadBtn').uploader({
+            url: 'ws://localhost:63588/ashx/upload.ashx',
+            fileExts: 'jpg;png',
+            text: '上传多个图片',
+            type: 'cutdouble',
+            minWidth: 100, //小图
+            minHeight:200,
+            maxWidth: 300, //大图
+            maxHeight: 600,
+            more: true,//是否可以上传多个
+            auto: true, //是否自动上传
+            maxSize: 1024 * 1024 * 50,
+            onSuccess: function (data) {
+                $('#relativeName').append('<img src="' + data.small.relativeName + '" style="border:1px solid red;" />');
+                $('#relativeName').append('<img src="'+data.big.relativeName+'" style="border:1px solid red;" />');
+            },
+            //onAllSuccess: function (data) {
+            //    console.info(data);
+            //    $('#uploadBtn input').val('');
+            //    $('#name').text(data.newName);
+            //    setTimeout(function () {
+            //        //  $('#relativeName').attr('src', data.relativeName).hide().fadeIn('normal');
+            //        $('#relativeName').append('<img src="' + data.relativeName + '" style="border:1px solid red;" />');;
+            //    }, 1500);
+            //},
+            onCheck: function (file) {
+               // console.info(file);
+            }
+        });
+    </script>
+</body>
+</html>
