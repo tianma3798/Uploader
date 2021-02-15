@@ -12,8 +12,4 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\UploadHandleCore\UploadHandleCore.csproj" />
-  </ItemGroup>
-
 </Project>
