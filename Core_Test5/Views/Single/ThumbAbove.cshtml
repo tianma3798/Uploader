@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<link href="~/js/Uploader6.1.css" rel="stylesheet" />
+<script src="~/js/Uploader6.1.js"></script>
+<h2>Index</h2>
+
+<br /><br /><br />
+<div>
+    上传文件名：
+    <span id="name"></span>
+    <br />
+    <br />
+    相对目录： <span id="relativeName"></span>
+</div>
+<br /><br /><br />
+<div class="uploader uploader-default" id="uploadBtn"></div>
+<br />
+<br /><br />
+      <script>
+    /*******使用WebScoket 方式处理传输*******/
+    var uploader = $('#uploadBtn').uploader({
+        url: 'ws://@(Context.Request.Host)/common/Socket',
+        fileExts:'*',
+        text: '前端大小图处理',
+            type: 'imgdouble',
+    minWidth: 100,
+    minHeight: 100,
+    maxWidth: 800,
+    maxHeight: 600,
+    handleType: '0',//对于大小图模式最好不要自动处理
+
+        onSuccess: function (data) {
+            console.info(data);
+            $('#name').text(data.newName);
+            $('#relativeName').text(data.relativeName);
+        }
+    });
+
+
+      </script>

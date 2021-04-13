@@ -338,7 +338,7 @@
     }
 
 .progressDiv .progressImg {
-   /* background: url(circleTwo.gif) no-repeat center center;*/
+    background: url(circleTwo.gif) no-repeat center center;
     width: 100%;
     height: 100px;
 }
