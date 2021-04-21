@@ -45,7 +45,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LogHelper">
-      <HintPath>..\..\..\自开发工具\DLL集合\LogHelper.dll</HintPath>
+      <HintPath>..\..\..\..\常用控件\DLL_Common\LogHelper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -119,6 +119,7 @@
     <Content Include="View6.3\cut3.html" />
     <Content Include="View6.3\cut2.html" />
     <Content Include="View6.3\cut1.html" />
+    <Content Include="View6.3\dialog1.html" />
     <Content Include="View\dialog3.html" />
     <Content Include="View\dialog2.html" />
     <Content Include="View\dialog1.html" />

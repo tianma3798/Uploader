@@ -170,6 +170,7 @@
                         i++;
                         if (i >= fileList.length) {
                             clearInterval(thisInter);
+                            //全部上传成功
                             if (_opts.onAllSuccess) _opts.onAllSuccess();
                         }
                     }
@@ -178,6 +179,9 @@
                     var file = this.files[0];
                     var reader = new MyReader(file, _this, _this.opts.auto);
                 }
+
+                //文件选择框
+                fileBox.value = null;
             }
         },
         //初始化对话框
@@ -783,7 +787,7 @@
             }, 1500);
             //关闭链接
             _this.close();
-            //触发事件
+            //触发事件,上传成功
             var _opts = _this.uploader.opts;
             if (_opts.onSuccess) {
                 _opts.onSuccess(_this.result);
@@ -1539,7 +1543,9 @@
             });
             var canvas = $('<canvas id="canvasSource" width="' + _opts.itemWidth + '" height="' + _opts.itemHeight + '"></canvas>');
             canvas.css({
-                position: 'absolute'
+                position: 'absolute',
+                left: 0,
+                top:0
             });
             imgItem.append(canvas);
             //追加覆盖层
