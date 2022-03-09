@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<link href="~/Uploader6.3/Uploader6.3.css" rel="stylesheet" />
+<script src="~/Uploader6.3/Uploader6.3.js"></script>
+<h2>Index</h2>
+
+<br />
+<br />
+<br />
+<div>
+    上传文件名：
+    <span id="name"></span>
+    <br />
+    <br />
+    相对目录： <span id="relativeName"></span>
+</div>
+<br />
+<br />
+<br />
+<div class="uploader uploader-default" id="uploadBtn"></div>
+<br />
+<div id="result"></div>
+<br />
+<br />
+<script>
+
+
+    //var url = 'wss://' + location.host + '/upload/common';
+    //// var url = 'ws://localhost:5084/wsone/Connect';
+    //var ws = null;
+    //ws = new WebSocket(url);
+    //ws.onopen = function (e) {
+    //    console.log('链接打开');
+    //}
+
+    //ws.onmessage = function (e) {
+    //    showData(e.data);
+    //}
+    //ws.onclose = function (e) {
+    //    console.info(e);
+    //    console.log('链接已经关闭');
+    //}
+    //ws.onerror = function (e) {
+    //    console.log('发生异常:' + e.message);
+    //}
+    ////显示后台字节数组
+    //function showData(data) {
+    //    var result = document.getElementById('result');
+    //    result.innerHTML += data + '<br />';
+    //}
+
+    ////发送
+    //function sendClick() {
+    //    //var content = new Int8Array([65, 66, 67, 68]);
+    //    //如果发送缓冲区没有数据才继续发送
+    //    if (ws.bufferedAmount <= 0) {
+    //        //ws.send(content);
+
+    //        ws.send('测试');
+    //    }
+    //}
+
+
+    //window.onclick = function () {
+    //    sendClick();
+    //}
+
+    ////关闭
+    //function closeClick() {
+    //    ws.close();
+    //    ws = null;
+
+    //}
+
+
+    /*******使用WebScoket 方式处理传输*******/
+    var uploader = $('#uploadBtn').uploader({
+        url: 'ws://' + location.host + '/upload/common',
+        fileExts:'*',
+        text: '简单上传按钮',
+        maxSize:1024*1024*1000,
+        more:true,
+        onSuccess: function (data) {
+            console.info(data);
+            $('#name').text(data.newName);
+            $('#relativeName').text(data.relativeName);
+        }
+    });
+
+    ///*******使用Ajax 方式处理传输*******/
+    //var uploader = $('#uploadBtn').uploader({
+    //    url: '../common/ajax',
+    //    fileExts: '*',
+    //    text: '简单上传按钮',
+    //    onSuccess: function (data) {
+    //        console.info(data);
+    //        $('#name').text(data.newName);
+    //        $('#relativeName').text(data.relativeName);
+    //    }
+    //});
+
+
+</script>
